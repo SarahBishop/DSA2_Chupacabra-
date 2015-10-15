@@ -1,0 +1,12 @@
+Sarah Bishop
+Ben Connick
+Alec Gerchman
+Eric Stivala
+
+Team Chupacabra
+
+
+Project Definition: 
+
+This project will be a star-fox inspired rail shooter. 
+Enemies will chase the player, and the player is capable of throwing/shooting at them to stall their pursuit. If an enemy is hit, they tumble backwards and knock over other enemies upon collision. 
