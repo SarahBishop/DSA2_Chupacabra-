@@ -1,12 +1,25 @@
-Sarah Bishop
-Ben Connick
-Alec Gerchman
-Eric Stivala
+Project: Chupacabra (Game)
 
-Team Chupacabra
+Team: Sucks Goats
+
+Repository: https://github.com/SarahBishop/DSA2_Chupacabra-
+
+MEMBERS: 
+Bishop, Sarah
+Connick, Ben
+Gerchman, Alec
+Stivala, Eric
 
 
-Project Definition: 
+Project Description: 
 
 This project will be a star-fox inspired rail shooter. 
 Enemies will chase the player, and the player is capable of throwing/shooting at them to stall their pursuit. If an enemy is hit, they tumble backwards and knock over other enemies upon collision. 
+
+Project Objective: 
+
+With this project we expect that people can be entertained by playing a rail shooter with fun physics.
+
+Milestone 1 Objective: 
+
+By milestone one we would like to have the basic code skeleton set up so that all team members may begin work on the different aspects of the game. Minor tasks might include getting appropriate models loaded and implimented, rudimentary collision detection, and the beginnings of our movement illusion. 
