@@ -90,15 +90,15 @@ matrix4 MyBoundingObjectClass::GetModelMatrix(void)
 
 vector3 MyBoundingObjectClass::GetCenterLocal(void)
 {
-
+	return m_v3Center;
 }
 vector3 MyBoundingObjectClass::GetCenterGlobal(void)
 {
-
+	return vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f));
 }
 vector3 MyBoundingObjectClass::GetHalfWidth(void)
 {
-
+	return m_v3HalfWidth;
 }
 
 void MyBoundingObjectClass::SetColor(vector3 a_v3Color)
