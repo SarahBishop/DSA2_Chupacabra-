@@ -96,17 +96,6 @@ MyBoundingObjectClass& MyBoundingObjectClass::operator = (MyBoundingObjectClass 
 	return *this;
 }
 
-// check sphere colliders
-bool MyBoundingObjectClass::IsSphereColliding(MyBoundingObjectClass* pOther) {
-	float fSumofRadii = fRadius + pOther->fRadius;
-	float fvecToCenter = abs(glm::distance(m_v3Center, pOther->m_v3Center));
-	if (fSumofRadii > fvecToCenter)
-	{
-		return true;
-	}
-	return false;
-}
-
 bool MyBoundingObjectClass::IsColliding(MyBoundingObjectClass* pOther)
 {
 	// check for sphere collision
@@ -115,10 +104,10 @@ bool MyBoundingObjectClass::IsColliding(MyBoundingObjectClass* pOther)
 	float magnitude = distance.x * distance.x + distance.y * distance.y + distance.z * distance.z;
 	magnitude = sqrt(magnitude);
 
-	if ((fRadius + pOther->fRadius) > (magnitude))
+	if ((fRadius + pOther->fRadiusG) > (magnitude))
 	{ 
 		isColliding = true;
-		//return isColliding;
+		//return isColliding; don't do this because we need to check AABB
 	}
 	else
 	{

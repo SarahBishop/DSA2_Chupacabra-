@@ -47,7 +47,6 @@ public:
 	void Release(void);
 	
 	// collision methods
-	bool IsSphereColliding(MyBoundingObjectClass* pOther);
 	bool IsColliding(MyBoundingObjectClass* pOther);
 
 	// box methods
