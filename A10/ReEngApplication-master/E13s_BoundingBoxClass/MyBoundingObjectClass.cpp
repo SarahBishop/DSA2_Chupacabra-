@@ -54,7 +54,7 @@ MyBoundingObjectClass::MyBoundingObjectClass(std::vector<vector3> listOfVertex)
 	//with the max and the min we calculate the center
 	m_v3Center = (m_v3Min + m_v3Max) / 2.0f;
 
-	// rad
+	// local rad
 	fRadius = glm::length(m_v3Center - m_v3Max);
 
 	//we calculate the distance between all the values of min and max vectors
@@ -219,6 +219,9 @@ void MyBoundingObjectClass::SetModelMatrix(matrix4 a_m4ToWorld)
 	m_v3HalfWidthG.x = glm::distance(vector3(m_v3MinG.x, 0.0f, 0.0f), vector3(m_v3MaxG.x, 0.0f, 0.0f)) / 2.0f;
 	m_v3HalfWidthG.y = glm::distance(vector3(0.0f, m_v3MinG.y, 0.0f), vector3(0.0f, m_v3MaxG.y, 0.0f)) / 2.0f;
 	m_v3HalfWidthG.z = glm::distance(vector3(0.0f, 0.0f, m_v3MinG.z), vector3(0.0f, 0.0f, m_v3MaxG.z)) / 2.0f;
+
+	// rad
+	fRadiusG = glm::length(m_v3CenterG - m_v3MaxG);
 
 }
 matrix4 MyBoundingObjectClass::GetModelMatrix(void)

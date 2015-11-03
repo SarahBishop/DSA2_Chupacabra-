@@ -10,6 +10,7 @@ public:
 	// attributes for sphere
 	vector3 center;
 	float fRadius;
+	float fRadiusG;
 	int nSubdivisions;
 	std::vector<vector3> myList;
 	bool isColliding;
