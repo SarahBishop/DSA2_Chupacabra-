@@ -18,15 +18,34 @@ public:
 
 	// box attributes
 	matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
-	vector3 m_v3Center = vector3(0.0f); //Will store the center point of the box Class
-	vector3 m_v3Min = vector3(0.0f); //Will store the minimum vector of the box Class
-	vector3 m_v3Max = vector3(0.0f); //Will store the maximum vector of the box Class
+	
+	vector3 m_v3Center = vector3(0.0f); //Will store the center point of the box 
+	vector3 m_v3CenterG = vector3(0.0f); //Will store the center point of the box 
+
+	vector3 m_v3Min = vector3(0.0f); //Will store the minimum vector of the box 
+	vector3 m_v3MinG = vector3(0.0f); //Will store the minimum vector of the box 
+
+	vector3 m_v3Max = vector3(0.0f); //Will store the maximum vector of the box 
+	vector3 m_v3MaxG = vector3(0.0f); //Will store the maximum vector of the box 
+
 	vector3 m_v3HalfWidth = vector3(0.0f);//Will store half the size of all sides
+	vector3 m_v3HalfWidthG = vector3(0.0f);//Will store half the size of all sides
 
 	// constructor
 	MyBoundingObjectClass(std::vector<vector3> listOfVertex);
+
+	// copy constructor
+	MyBoundingObjectClass(MyBoundingObjectClass const& other);
+
+	// copy assingment
+	MyBoundingObjectClass& operator=(MyBoundingObjectClass const& other);
+
+	// destructor
+	~MyBoundingObjectClass(void);
+
+	void Release(void);
 	
-	// methods
+	// collision methods
 	bool IsSphereColliding(MyBoundingObjectClass* pOther);
 	bool IsColliding(MyBoundingObjectClass* pOther);
 
@@ -36,6 +55,7 @@ public:
 	vector3 GetCenterLocal(void);
 	vector3 GetCenterGlobal(void);
 	vector3 GetHalfWidth(void);
+	vector3 GetHalfWidthG(void);
 
 	void ToggleVisible(void);
 

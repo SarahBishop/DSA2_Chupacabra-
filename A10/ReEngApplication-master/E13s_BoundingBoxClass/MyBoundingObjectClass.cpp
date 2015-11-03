@@ -17,6 +17,10 @@ MyBoundingObjectClass::MyBoundingObjectClass(std::vector<vector3> listOfVertex)
 	m_v3Min = vector3(0.0f);
 	m_v3Max = vector3(0.0f);
 	m_v3HalfWidth = vector3(0.0f);
+	m_v3CenterG = vector3(0.0f);
+	m_v3MinG = vector3(0.0f);
+	m_v3MaxG = vector3(0.0f);
+	m_v3HalfWidthG = vector3(0.0f);
 	
 	//Count the points of the incoming list
 	uint nVertexCount = listOfVertex.size();
@@ -60,6 +64,38 @@ MyBoundingObjectClass::MyBoundingObjectClass(std::vector<vector3> listOfVertex)
 
 }
 
+MyBoundingObjectClass::MyBoundingObjectClass(MyBoundingObjectClass const& other) {
+	m_m4ToWorld = other.m_m4ToWorld;
+
+	m_v3Center = other.m_v3Center;
+	m_v3Min = other.m_v3Min;
+	m_v3Max = other.m_v3Max;
+
+	m_v3CenterG = other.m_v3CenterG;
+	m_v3MinG = other.m_v3MinG;
+	m_v3MaxG = other.m_v3MaxG;
+
+	m_v3HalfWidth = other.m_v3HalfWidth;
+	m_v3HalfWidthG = other.m_v3HalfWidthG;
+}
+
+MyBoundingObjectClass& MyBoundingObjectClass::operator = (MyBoundingObjectClass const& other) {
+	myList = other.myList;
+	m_m4ToWorld = other.m_m4ToWorld;
+
+	m_v3Center = other.m_v3Center;
+	m_v3Min = other.m_v3Min;
+	m_v3Max = other.m_v3Max;
+
+	m_v3CenterG = other.m_v3CenterG;
+	m_v3MinG = other.m_v3MinG;
+	m_v3MaxG = other.m_v3MaxG;
+
+	m_v3HalfWidth = other.m_v3HalfWidth;
+	m_v3HalfWidthG = other.m_v3HalfWidthG;
+	return *this;
+}
+
 // check sphere colliders
 bool MyBoundingObjectClass::IsSphereColliding(MyBoundingObjectClass* pOther) {
 	float fSumofRadii = fRadius + pOther->fRadius;
@@ -71,27 +107,61 @@ bool MyBoundingObjectClass::IsSphereColliding(MyBoundingObjectClass* pOther) {
 	return false;
 }
 
-bool MyBoundingObjectClass::IsColliding(MyBoundingObjectClass* other)
+bool MyBoundingObjectClass::IsColliding(MyBoundingObjectClass* pOther)
 {
 	// check for sphere collision
 	// magnitude
-	vector3 distance = other->center - center;
+	vector3 distance = pOther->center - center;
 	float magnitude = distance.x * distance.x + distance.y * distance.y + distance.z * distance.z;
 	magnitude = sqrt(magnitude);
 
-	if ((fRadius + other->fRadius) > (magnitude))
-	{
+	if ((fRadius + pOther->fRadius) > (magnitude))
+	{ 
 		isColliding = true;
 		//return isColliding;
 	}
 	else
 	{
 		isColliding = false;
-		return isColliding;
+		return isColliding; // exits if no collision
 	}
 
 	// if you reach this point, check for AABB collision
 
+	//Get all vectors in global space
+	vector3 v3Min = vector3(m_m4ToWorld * vector4(m_v3Min, 1.0f));
+	vector3 v3Max = vector3(m_m4ToWorld * vector4(m_v3Max, 1.0f));
+
+	vector3 v3MinO = vector3(pOther->m_m4ToWorld * vector4(pOther->m_v3Min, 1.0f));
+	vector3 v3MaxO = vector3(pOther->m_m4ToWorld * vector4(pOther->m_v3Max, 1.0f));
+
+	/*
+	Are they colliding?
+	For boxes we will assume they are colliding, unless at least one of the following conditions is not met
+	*/
+	bool bColliding = true;
+
+	//Check for X
+	if (m_v3MaxG.x < pOther->m_v3MinG.x)
+		bColliding = false;
+	if (m_v3MinG.x > pOther->m_v3MaxG.x)
+		bColliding = false;
+
+	//Check for Y
+	if (m_v3MaxG.y < pOther->m_v3MinG.y)
+		bColliding = false;
+	if (m_v3MinG.y > pOther->m_v3MaxG.y)
+		bColliding = false;
+
+	//Check for Z
+	if (m_v3MaxG.z < pOther->m_v3MinG.z)
+		bColliding = false;
+	if (m_v3MinG.z > pOther->m_v3MaxG.z)
+		bColliding = false;
+
+	isColliding = bColliding;
+
+	return bColliding;
 
 }
 
@@ -120,8 +190,16 @@ vector3 MyBoundingObjectClass::GetHalfWidth(void)
 {
 	return m_v3HalfWidth;
 }
+vector3 MyBoundingObjectClass::GetHalfWidthG(void){ return m_v3HalfWidthG; }
 
 void MyBoundingObjectClass::SetColor(vector3 a_v3Color)
 {
 	v3Color = a_v3Color;
+}
+
+MyBoundingObjectClass::~MyBoundingObjectClass(){ Release(); };
+
+void MyBoundingObjectClass::Release(void)
+{
+
 }
