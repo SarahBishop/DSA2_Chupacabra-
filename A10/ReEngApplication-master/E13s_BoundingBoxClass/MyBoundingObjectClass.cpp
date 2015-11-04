@@ -10,6 +10,7 @@ MyBoundingObjectClass::MyBoundingObjectClass(std::vector<vector3> listOfVertex)
 	v3Color = vector3(0.0f, 1.0f, 0.0f);
 	m_pSphere = new PrimitiveClass();
 	m_pSphere->GenerateSphere(fRadius, nSubdivisions, v3Color);
+	visible = true; 
 
 	// box attributes
 	m_m4ToWorld = IDENTITY_M4;
@@ -155,7 +156,7 @@ bool MyBoundingObjectClass::IsColliding(MyBoundingObjectClass* pOther)
 }
 
 void MyBoundingObjectClass::ToggleVisible() {
-	// nah
+	visible = !visible; 
 }
 
 void MyBoundingObjectClass::SetModelMatrix(matrix4 a_m4ToWorld)
@@ -235,6 +236,11 @@ vector3 MyBoundingObjectClass::GetHalfWidthG(void){ return m_v3HalfWidthG; }
 void MyBoundingObjectClass::SetColor(vector3 a_v3Color)
 {
 	v3Color = a_v3Color;
+}
+
+vector3 MyBoundingObjectClass::GetColor()
+{
+	return v3Color; 
 }
 
 MyBoundingObjectClass::~MyBoundingObjectClass(){ Release(); };

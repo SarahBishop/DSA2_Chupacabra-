@@ -16,6 +16,7 @@ public:
 	bool isColliding;
 	PrimitiveClass* m_pSphere;
 	vector3 v3Color;
+	bool visible; 
 
 	// box attributes
 	matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
@@ -61,6 +62,7 @@ public:
 
 	// set color of primitive
 	void SetColor(vector3 a_v3Color);
+	vector3 GetColor(); 
 };
 
 #endif //MY_BOUNDING_OBJECT_CLASS

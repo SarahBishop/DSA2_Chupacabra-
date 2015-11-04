@@ -1,7 +1,7 @@
 #include "AppClass.h"
 void AppClass::InitWindow(String a_sWindowName)
 {
-	super::InitWindow("MyBoundingSphereClass example"); // Window Name
+	super::InitWindow("Assignment 10"); // Window Name
 
 	// Set the clear color based on Microsoft's CornflowerBlue (default in XNA)
 	//if this line is in Init Application it will depend on the .cfg file, if it
@@ -21,6 +21,12 @@ void AppClass::InitVariables(void)
 
 	m_pBB1 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Steve"));
 	m_pBB2 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Creeper"));
+
+	// initiate singleton
+	//BoundingObjectManager* instance = BoundingObjectManager::GetInstance();
+	instance = BoundingObjectManager::GetInstance(); 
+	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Steve"));
+	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Creeper"));
 }
 
 void AppClass::Update(void)
@@ -41,22 +47,39 @@ void AppClass::Update(void)
 	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Steve");
 	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O2), "Creeper");
 
-	m_pBB1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
-	m_pBB2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
+	//m_pBB1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
+	//m_pBB2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
+	instance->objects[0]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
+	instance->objects[1]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
+	
 
 	//Add a representation of the Spheres to the render list
 	vector3 v3Color = REWHITE;
-	if (m_pBB1->IsColliding(m_pBB2))
-		v3Color = RERED;
+	//if (instance->objects[0]->IsColliding(instance->objects[1]))
+	//	v3Color = RERED;
+	for (int i = 0; i < instance->objects.size(); i++)
+		instance->objects[i]->SetColor(REWHITE); 
+	instance->CheckCollisions(); 
 
-	m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB1->GetCenterGlobal()) * glm::scale(m_pBB1->GetHalfWidthG() * 2.0f), v3Color, WIRE);
-	m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB2->GetCenterGlobal()) * glm::scale(m_pBB2->GetHalfWidthG() * 2.0f), v3Color, WIRE);
+	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB1->GetCenterGlobal()) * glm::scale(m_pBB1->GetHalfWidthG() * 2.0f), v3Color, WIRE);
+	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB2->GetCenterGlobal()) * glm::scale(m_pBB2->GetHalfWidthG() * 2.0f), v3Color, WIRE);
 
-	m_pMeshMngr->AddCubeToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(m_pBB1->GetHalfWidth() * 2.0f), v3Color, WIRE);
-	m_pMeshMngr->AddCubeToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(m_pBB2->GetHalfWidth() * 2.0f), v3Color, WIRE);
+	//m_pMeshMngr->AddCubeToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(m_pBB1->GetHalfWidth() * 2.0f), v3Color, WIRE);
+	//m_pMeshMngr->AddCubeToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(m_pBB2->GetHalfWidth() * 2.0f), v3Color, WIRE);
 
-	m_pMeshMngr->AddSphereToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB1->fRadiusG)), v3Color, WIRE);
-	m_pMeshMngr->AddSphereToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB2->fRadiusG)), v3Color, WIRE);
+	//m_pMeshMngr->AddSphereToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB1->fRadiusG)), v3Color, WIRE);
+	//m_pMeshMngr->AddSphereToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB2->fRadiusG)), v3Color, WIRE);
+
+	for (int i = 0; i < instance->objects.size(); i++)
+	{
+		if (instance->aabbVisible)
+			m_pMeshMngr->AddCubeToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(instance->objects[i]->GetHalfWidthG() * 2.0f), instance->objects[i]->v3Color, WIRE);
+		if (instance->isVisible && instance->objects[i]->visible)
+		{
+			m_pMeshMngr->AddCubeToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(instance->objects[i]->GetHalfWidth() * 2.0f), instance->objects[i]->v3Color, WIRE);
+			m_pMeshMngr->AddSphereToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * instance->objects[i]->fRadiusG)), instance->objects[i]->v3Color, WIRE);
+		}
+	}
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
