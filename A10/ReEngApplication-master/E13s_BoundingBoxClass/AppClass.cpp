@@ -91,7 +91,15 @@ void AppClass::Update(void)
 	//Print info on the screen
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
 	m_pMeshMngr->Print("FPS:");
-	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
+	m_pMeshMngr->PrintLine(std::to_string(nFPS), RERED);
+
+	// print bools
+	m_pMeshMngr->Print("BO Visible (V) : ");
+	m_pMeshMngr->PrintLine(std::to_string(instance->isVisible), RERED);
+	m_pMeshMngr->Print("AABB Visible (B) : ");
+	m_pMeshMngr->PrintLine(std::to_string(instance->aabbVisible), RERED);
+	m_pMeshMngr->Print("Collision Resolution (R) : ");
+	m_pMeshMngr->PrintLine(std::to_string(instance->canCollide), RERED);
 }
 
 void AppClass::Display(void)

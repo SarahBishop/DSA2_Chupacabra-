@@ -59,6 +59,10 @@ void BoundingObjectManager::CheckCollisions()
 		}
 	}
 }
+void BoundingObjectManager::ToggleResolution()
+{
+	canCollide = !canCollide;
+}
 
 BoundingObjectManager::BoundingObjectManager()
 {

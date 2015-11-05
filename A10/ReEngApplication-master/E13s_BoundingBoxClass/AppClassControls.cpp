@@ -46,17 +46,74 @@ void AppClass::ProcessKeyboard(void)
 #pragma region Creeper Control
 	if (bModifier)
 		fSpeed *= 10.0f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_v3O1.x -= 0.1f;
+	// if canCollide, bounce off and move other object
+	if (instance->canCollide)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			m_v3O1.x -= 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_v3O1.x += 0.1f;
+			// if collision, push back
+			if (instance->objects[0]->isColliding)
+			{
+				m_v3O1.x += 1.0f;
+				m_v3O2.x -= 1.0f; // move other object
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			m_v3O1.x += 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		m_v3O1.y -= 0.1f;
+			// if collision, push back
+			if (instance->objects[0]->isColliding)
+			{
+				m_v3O1.x -= 1.0f;
+				m_v3O2.x += 1.0f; // move other object
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			m_v3O1.y -= 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		m_v3O1.y += 0.1f;
+			// if collision, push back
+			if (instance->objects[0]->isColliding)
+			{
+				m_v3O1.y += 1.0f;
+				m_v3O2.y -= 1.0f; // move other object
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			m_v3O1.y += 0.1f;
+
+			// if collision, push back
+			if (instance->objects[0]->isColliding)
+			{
+				m_v3O1.y -= 1.0f;
+				m_v3O2.y += 1.0f; // move other object
+			}
+		}
+	}
+	// normal movement
+	else
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			m_v3O1.x -= 0.1f;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			m_v3O1.x += 0.1f;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			m_v3O1.y -= 0.1f;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			m_v3O1.y += 0.1f;
+		}
+	}
 #pragma endregion
 
 #pragma region Manager Control
@@ -64,6 +121,8 @@ void AppClass::ProcessKeyboard(void)
 		instance->ToggleVisibility(); 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
 		instance->ToggleAABB(); 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		instance->ToggleResolution();
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && instance->objects.size() < 1)
 		instance->objects[0]->ToggleVisible(); 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && instance->objects.size() < 2)

@@ -18,10 +18,12 @@ public:
 	void SetVisibility(int object, bool visible);  
 	void CheckCollisions(); 
 	void ToggleAABB(); 
+	void ToggleResolution(); // toggle collision resolution
 
 	std::vector<MyBoundingObjectClass*> objects; 
-	bool isVisible;
-	bool aabbVisible; 
+	bool isVisible = true;
+	bool aabbVisible = true;
+	bool canCollide = true; // true = collision resolution
 
 private:
 	BoundingObjectManager();
