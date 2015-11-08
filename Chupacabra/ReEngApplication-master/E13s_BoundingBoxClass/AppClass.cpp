@@ -27,6 +27,9 @@ void AppClass::InitVariables(void)
 	instance = BoundingObjectManager::GetInstance(); 
 	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
 	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
+
+	canyonManager = new CanyonManager();
+	canyonManager->GenerateCanyon(35);
 }
 
 void AppClass::Update(void)
@@ -42,6 +45,9 @@ void AppClass::Update(void)
 		CameraRotation();
 
 	ArcBall();
+
+	// update canyon
+	canyonManager->Update();
 
 	//Set the model matrices for both objects and Bounding Spheres
 	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Chupacabra");
@@ -84,29 +90,29 @@ void AppClass::Update(void)
 	}
 
 	// draw planes
-	m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(0.0f, -1.0f, 0.0f)) * glm::rotate(90.0f, vector3(1.0f, 0.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE); // floor
-	m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
-	m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(-5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
+	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(0.0f, -1.0f, 0.0f)) * glm::rotate(90.0f, vector3(1.0f, 0.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE); // floor
+	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
+	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(-5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
 
-	//Indicate the FPS
-	int nFPS = m_pSystem->GetFPS();
-	//print info into the console
-	printf("FPS: %d            \r", nFPS);//print the Frames per Second
-	//Print info on the screen
-	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
-	m_pMeshMngr->Print("FPS:");
-	m_pMeshMngr->PrintLine(std::to_string(nFPS), RERED);
+	////Indicate the FPS
+	//int nFPS = m_pSystem->GetFPS();
+	////print info into the console
+	//printf("FPS: %d            \r", nFPS);//print the Frames per Second
+	////Print info on the screen
+	//m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
+	//m_pMeshMngr->Print("FPS:");
+	//m_pMeshMngr->PrintLine(std::to_string(nFPS), RERED);
 
-	// print bools
-	m_pMeshMngr->Print("BO Visible (V) : ");
-	m_pMeshMngr->PrintLine(std::to_string(instance->isVisible), RERED);
-	m_pMeshMngr->Print("AABB Visible (B) : ");
-	m_pMeshMngr->PrintLine(std::to_string(instance->aabbVisible), RERED);
-	m_pMeshMngr->Print("Collision Resolution (R) : ");
-	m_pMeshMngr->PrintLine(std::to_string(instance->canCollide), RERED);
+	//// print bools
+	//m_pMeshMngr->Print("BO Visible (V) : ");
+	//m_pMeshMngr->PrintLine(std::to_string(instance->isVisible), RERED);
+	//m_pMeshMngr->Print("AABB Visible (B) : ");
+	//m_pMeshMngr->PrintLine(std::to_string(instance->aabbVisible), RERED);
+	//m_pMeshMngr->Print("Collision Resolution (R) : ");
+	//m_pMeshMngr->PrintLine(std::to_string(instance->canCollide), RERED);
 }
 
 void AppClass::Display(void)
@@ -131,6 +137,7 @@ void AppClass::Display(void)
 	}
 	
 	m_pMeshMngr->Render(); //renders the render list
+	canyonManager->Render(); // render canyon
 
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
 }
@@ -140,4 +147,6 @@ void AppClass::Release(void)
 	super::Release(); //release the memory of the inherited fields
 	SafeDelete(m_pBB1);
 	SafeDelete(m_pBB2);
+	SafeDelete(instance);
+	SafeDelete(canyonManager);
 }
