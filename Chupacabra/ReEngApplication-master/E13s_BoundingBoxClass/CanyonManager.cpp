@@ -34,6 +34,10 @@ void CanyonManager::Update()
 		if (listOfSegments.at(i).v3Position.z <= farPlane)
 		{
 			listOfSegments.at(i).v3Position = vector3(0.0f, 0.0f, nearPlane);
+			
+			//change canyon color
+			float brightness = (rand() % 399 + 400) / 1000.f;
+			listOfSegments.at(i).v3Color = vector3(brightness, brightness * 0.5f, 0.1f);
 		}
 	}
 }
