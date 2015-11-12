@@ -5,6 +5,9 @@
 #include <time.h>
 #include <cstdlib>
 #include <math.h>
+#include "MyBoundingObjectClass.h"
+
+#define GRAVITY -0.02f
 
 class Chupacabra {
 
@@ -22,15 +25,30 @@ public:
 	float moveMod1; 
 	//also for determining a unique random  movement pattern
 	float moveMod2; 
+	// acceleration and max limit for accel
+	glm::vec3 v3Acceleration;
+	float fMaxAccel;
+
+	// forces
+	glm::vec3 v3Gravity;
+	glm::vec3 v3ForwardForce;
+
+	// bounding object attribute
+	MyBoundingObjectClass* myBO;
+	MeshManagerSingleton* m_pMeshMngr;
+
+	// radius for collisions, possibly temporary
+	//float fRadius;
 
 	//Constructor
 	Chupacabra(vector3 pos); 
 	//Destructor
-	~Chupacabra(); 
+	//~Chupacabra(); 
 	//Updates the chupacabra's position
 	void Move(); 
 	void SetRolling(); 
 	void Bounce(vector3 otherPos); 
+	void Render();
 };
 
 #endif

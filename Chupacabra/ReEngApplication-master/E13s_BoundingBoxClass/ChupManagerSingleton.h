@@ -15,6 +15,11 @@ public:
 	//TODO
 	//put all other functionality of the manager here
 
+	// update Chupacabras
+	void Update();
+	void GenerateChupacabras(uint numOfChups, std::vector<vector3> listOfVertex, bool isSphere);
+	void Render();
+
 
 private:
 	//dat private constructor

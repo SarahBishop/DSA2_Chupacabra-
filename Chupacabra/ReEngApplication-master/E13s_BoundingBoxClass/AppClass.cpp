@@ -16,18 +16,20 @@ void AppClass::InitVariables(void)
 	m_v3O2 = vector3(2.5f, 0.0f, 0.0f);
 
 	//Load Models
-	m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
-	m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra2");
+	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
+	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra2");
 
 	//m_pBB1 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra"), true);
 	//m_pBB2 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
 
 	// initiate singleton
 	//BoundingObjectManager* instance = BoundingObjectManager::GetInstance();
-	instance = BoundingObjectManager::GetInstance(); 
+	//instance = BoundingObjectManager::GetInstance(); 
 	chupManager = ChupManagerSingleton::GetInstance(); 
-	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
-	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
+	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
+	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
+
+	chupManager->GenerateChupacabras(2, m_pMeshMngr->GetVertexList("Chupacabra"), true);
 
 	canyonManager = new CanyonManager();
 	canyonManager->GenerateCanyon(35);
@@ -51,22 +53,28 @@ void AppClass::Update(void)
 	canyonManager->Update();
 
 	//Set the model matrices for both objects and Bounding Spheres
-	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Chupacabra");
-	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O2), "Chupacabra2");
+	//m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Chupacabra");
+	//m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O2), "Chupacabra2");
 
 	//m_pBB1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
 	//m_pBB2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
-	instance->objects[0]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra"));
-	instance->objects[1]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra2"));
+	//instance->objects[0]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra"));
+	//instance->objects[1]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra2"));
+	for (int i = 0; i < chupManager->chups.size(); i++)
+	{
+		chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));//m_pMeshMngr->GetModelMatrix("Chupacabra"));
+	}
 	
+	// update chupacabras
+	chupManager->Update();
 
 	//Add a representation of the Spheres to the render list
 	vector3 v3Color = REWHITE;
 	//if (instance->objects[0]->IsColliding(instance->objects[1]))
 	//	v3Color = RERED;
-	for (int i = 0; i < instance->objects.size(); i++)
+	/*for (int i = 0; i < instance->objects.size(); i++)
 		instance->objects[i]->SetColor(REWHITE); 
-	instance->CheckCollisions(); 
+	instance->CheckCollisions(); */
 
 	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB1->GetCenterGlobal()) * glm::scale(m_pBB1->GetHalfWidthG() * 2.0f), v3Color, WIRE);
 	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB2->GetCenterGlobal()) * glm::scale(m_pBB2->GetHalfWidthG() * 2.0f), v3Color, WIRE);
@@ -77,18 +85,18 @@ void AppClass::Update(void)
 	//m_pMeshMngr->AddSphereToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB1->fRadiusG)), v3Color, WIRE);
 	//m_pMeshMngr->AddSphereToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB2->fRadiusG)), v3Color, WIRE);
 
-	for (int i = 0; i < instance->objects.size(); i++)
-	{
-		if (instance->aabbVisible)
-			//m_pMeshMngr->AddCubeToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(instance->objects[i]->GetHalfWidthG() * 2.0f), instance->objects[i]->v3Color, WIRE);
-		if (instance->isVisible && instance->objects[i]->visible)
-		{
-			//m_pMeshMngr->AddCubeToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(instance->objects[i]->GetHalfWidth() * 2.0f), instance->objects[i]->v3Color, WIRE);
-			//m_pMeshMngr->AddSphereToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * instance->objects[i]->fRadiusG)), instance->objects[i]->v3Color, WIRE);
-			//instance->objects[0]->m_pSphere->RenderWire(glm::translate(matrix4(1.0f), instance->objects[0]->center)),;
-			m_pMeshMngr->AddSphereToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(vector3(instance->objects[i]->fRadius)), REWHITE, WIRE);
-		}
-	}
+	//for (int i = 0; i < instance->objects.size(); i++)
+	//{
+	//	if (instance->aabbVisible)
+	//		//m_pMeshMngr->AddCubeToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(instance->objects[i]->GetHalfWidthG() * 2.0f), instance->objects[i]->v3Color, WIRE);
+	//	if (instance->isVisible && instance->objects[i]->visible)
+	//	{
+	//		//m_pMeshMngr->AddCubeToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(instance->objects[i]->GetHalfWidth() * 2.0f), instance->objects[i]->v3Color, WIRE);
+	//		//m_pMeshMngr->AddSphereToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * instance->objects[i]->fRadiusG)), instance->objects[i]->v3Color, WIRE);
+	//		//instance->objects[0]->m_pSphere->RenderWire(glm::translate(matrix4(1.0f), instance->objects[0]->center)),;
+	//		m_pMeshMngr->AddSphereToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(vector3(instance->objects[i]->fRadius)), REWHITE, WIRE);
+	//	}
+	//}
 
 	// draw planes
 	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(0.0f, -1.0f, 0.0f)) * glm::rotate(90.0f, vector3(1.0f, 0.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE); // floor
@@ -139,6 +147,7 @@ void AppClass::Display(void)
 	
 	m_pMeshMngr->Render(); //renders the render list
 	canyonManager->Render(); // render canyon
+	chupManager->Render();
 
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
 }
@@ -148,6 +157,7 @@ void AppClass::Release(void)
 	super::Release(); //release the memory of the inherited fields
 	SafeDelete(m_pBB1);
 	SafeDelete(m_pBB2);
-	SafeDelete(instance);
+	//SafeDelete(instance);
 	SafeDelete(canyonManager);
+	SafeDelete(chupManager);
 }

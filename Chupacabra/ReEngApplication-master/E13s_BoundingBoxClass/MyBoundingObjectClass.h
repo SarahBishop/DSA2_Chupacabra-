@@ -34,6 +34,7 @@ public:
 	vector3 m_v3HalfWidthG = vector3(0.0f);//Will store half the size of all sides
 
 	// constructor
+	MyBoundingObjectClass(); // default
 	MyBoundingObjectClass(std::vector<vector3> listOfVertex);
 	MyBoundingObjectClass(std::vector<vector3> listOfVertex, bool isSphere); // overloaded constructor
 

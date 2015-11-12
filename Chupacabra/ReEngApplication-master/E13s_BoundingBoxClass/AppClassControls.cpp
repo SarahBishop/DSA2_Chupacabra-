@@ -43,7 +43,7 @@ void AppClass::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(fSpeed);
 #pragma endregion
 
-#pragma region Creeper Control
+/*#pragma region Creeper Control
 	if (bModifier)
 		fSpeed *= 10.0f;
 	// if canCollide, bounce off and move other object
@@ -114,15 +114,15 @@ void AppClass::ProcessKeyboard(void)
 			m_v3O1.y += 0.1f;
 		}
 	}
-#pragma endregion
+#pragma endregion*/
 
 #pragma region Manager Control
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
 		instance->ToggleVisibility(); 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
 		instance->ToggleAABB(); 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		instance->ToggleResolution();
+		instance->ToggleResolution();*/
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && instance->objects.size() < 1)
 		instance->objects[0]->ToggleVisible(); 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && instance->objects.size() < 2)
