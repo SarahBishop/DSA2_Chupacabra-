@@ -39,6 +39,12 @@
     <ClCompile Include="CanyonManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chupacabra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChupManagerSingleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\Resource.h">
@@ -60,6 +66,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CanyonManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chupacabra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChupManagerSingleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -25,6 +25,7 @@ void AppClass::InitVariables(void)
 	// initiate singleton
 	//BoundingObjectManager* instance = BoundingObjectManager::GetInstance();
 	instance = BoundingObjectManager::GetInstance(); 
+	chupManager = ChupManagerSingleton::GetInstance(); 
 	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
 	instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
 

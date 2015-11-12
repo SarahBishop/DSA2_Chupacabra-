@@ -11,6 +11,8 @@ Date: 2015/09
 #include "MyBoundingObjectClass.h"
 #include "BoundingObjectManager.h"
 #include "CanyonManager.h"
+#include "Chupacabra.h"
+#include "ChupManagerSingleton.h"
 
 using namespace ReEng; //Using ReEng namespace to use all the classes in the dll
 
@@ -20,7 +22,7 @@ class AppClass : public ReEngAppClass
 	MyBoundingObjectClass* m_pBB2 = nullptr;
 	BoundingObjectManager* instance = nullptr; 
 	CanyonManager* canyonManager = nullptr;
-	
+	ChupManagerSingleton* chupManager = nullptr; 
 
 	vector3 m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
 	vector3 m_v3O2 = vector3( 2.5f, 0.0f, 0.0f);
