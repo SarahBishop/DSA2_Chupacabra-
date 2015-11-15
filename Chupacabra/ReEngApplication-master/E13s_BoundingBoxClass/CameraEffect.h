@@ -1,6 +1,7 @@
 #ifndef __CAMERA_EFFECT_H__
 #define __CAMERA_EFFECT_H__ 
 #include "RE\ReEngAppClass.h"
+
 //#include "AppClass.h"
 class CameraEffect
 {

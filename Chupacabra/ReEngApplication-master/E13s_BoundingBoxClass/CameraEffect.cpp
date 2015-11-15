@@ -14,5 +14,6 @@ CameraEffect::~CameraEffect()
 
 void CameraEffect::CameraBob() {
 	// bob camera linearly
-	mngr->SetPosition(mngr->GetPosition().x, abs(time % 2 - 1), mngr.GetPosition().z)
+	mngr->SetPosition(vector3(mngr->GetPosition(-1).x, abs(clock() % 400 - 200)/5000.f + 0.5f, mngr->GetPosition(-1).z));
+	//std::cout << (clock()) << " ";
 }
