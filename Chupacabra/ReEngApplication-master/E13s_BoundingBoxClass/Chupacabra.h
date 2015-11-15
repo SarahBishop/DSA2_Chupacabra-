@@ -29,6 +29,9 @@ public:
 	glm::vec3 v3Acceleration;
 	float fMaxAccel;
 
+	//code for rendering multiple objects with the same model
+	String modelName;
+
 	// forces
 	glm::vec3 v3Gravity;
 	glm::vec3 v3ForwardForce;
@@ -41,7 +44,7 @@ public:
 	//float fRadius;
 
 	//Constructor
-	Chupacabra(vector3 pos); 
+	Chupacabra(vector3 pos, String mName); 
 	//Destructor
 	//~Chupacabra(); 
 	//Updates the chupacabra's position
