@@ -33,6 +33,7 @@ void AppClass::InitVariables(void)
 
 	canyonManager = new CanyonManager();
 	canyonManager->GenerateCanyon(35);
+	cameraFX = new CameraEffect();
 }
 
 void AppClass::Update(void)
@@ -51,6 +52,8 @@ void AppClass::Update(void)
 
 	// update canyon
 	canyonManager->Update();
+
+	cameraFX->CameraBob();
 
 	//Set the model matrices for both objects and Bounding Spheres
 	//m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Chupacabra");
