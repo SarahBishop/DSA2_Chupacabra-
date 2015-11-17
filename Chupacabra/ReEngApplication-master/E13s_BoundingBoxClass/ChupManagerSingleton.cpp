@@ -15,12 +15,20 @@ ChupManagerSingleton::ChupManagerSingleton()
 {
 	instance = nullptr; 
 }
-void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, std::vector<vector3> listOfVertex, bool isSphere)
+void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
 {
+	//code for rendering multiple chups with one model
+	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	for (int i = 0; i < numOfChupas; i++)
 	{
-		chups.push_back(Chupacabra(vector3((i+1.0f))));
-		chups[i].myBO = new MyBoundingObjectClass(listOfVertex, isSphere);
+		m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
+	}
+	
+	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
+	for (int i = 0; i < numOfChupas; i++)
+	{
+		chups.push_back(Chupacabra(vector3((i + 1.0f)), m_pMeshMngr->GetInstanceByIndex(i)->GetName()));
+		chups[i].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList(m_pMeshMngr->GetNameOfInstanceByIndex(i)), isSphere);
 	}
 }
 void ChupManagerSingleton::Update()

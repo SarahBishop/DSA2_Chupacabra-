@@ -7,6 +7,7 @@
 class ChupManagerSingleton{
 
 	static ChupManagerSingleton* instance;
+	
 public: 
 	static ChupManagerSingleton* GetInstance(); //gotta make a singleton
 	//hold those chups
@@ -14,10 +15,11 @@ public:
 
 	//TODO
 	//put all other functionality of the manager here
+	MeshManagerSingleton* m_pMeshMngr; // for rendering multiple chups with one model
 
 	// update Chupacabras
 	void Update();
-	void GenerateChupacabras(uint numOfChups, std::vector<vector3> listOfVertex, bool isSphere);
+	void GenerateChupacabras(uint numOfChups, bool isSphere);
 	void Render();
 
 

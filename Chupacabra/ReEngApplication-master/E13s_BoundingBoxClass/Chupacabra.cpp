@@ -1,6 +1,6 @@
 #include "Chupacabra.h"
 
-Chupacabra::Chupacabra(vector3 pos)
+Chupacabra::Chupacabra(vector3 pos, String mName)
 {
 	rolling = false; 
 	position = pos; 
@@ -11,6 +11,8 @@ Chupacabra::Chupacabra(vector3 pos)
 	moveMod2 = rand(); 
 	myBO = nullptr;
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
+
+	modelName = mName;
 
 	// acceleration forces
 	v3Gravity = vector3(0.0f, GRAVITY, 0.0f);
@@ -61,5 +63,7 @@ void Chupacabra::Bounce(vector3 otherPos)
 void Chupacabra::Render()
 {
 	//vector4 tempV4 = vector4(position.x, position.y, position.z, 1);
-	m_pMeshMngr->AddSphereToQueue(glm::translate(position),REWHITE);
+	//m_pMeshMngr->AddSphereToQueue(glm::translate(position),REWHITE);
+	m_pMeshMngr->AddInstanceToRenderList(modelName);
+	m_pMeshMngr->SetModelMatrix(glm::translate(position), modelName);
 }
