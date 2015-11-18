@@ -2,6 +2,7 @@
 #define _MY_ENTITY_SINGLETON_
 
 #include "MyEntityClass.h"
+#include "MyBOManager.h"
 
 class MyEntitySingleton
 {
@@ -9,6 +10,12 @@ class MyEntitySingleton
 	static MyEntitySingleton* m_pInstance; // Singleton pointer
 	std::vector<int> m_lData; //list of elements
 	std::vector<MyEntityClass> vectorOfEntities; // holds all entities
+
+	// BOManager singleton
+	//m_pColliderManager = MyBOManager::GetInstance();
+	MyBOManager* m_pColliderManager = nullptr;
+	
+
 public:
 	/*
 	Method:

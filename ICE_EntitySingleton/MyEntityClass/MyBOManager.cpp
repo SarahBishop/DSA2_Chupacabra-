@@ -73,6 +73,8 @@ void MyBOManager::SetModelMatrix(matrix4 a_mModelMatrix, String a_sIndex)
 }
 void MyBOManager::DisplaySphere(int a_nIndex, vector3 a_v3Color)
 {
+	
+
 	//If the index is larger than the number of objects stored return with no changes
 	if (a_nIndex >= static_cast<int>(m_nObjectCount))
 		return;

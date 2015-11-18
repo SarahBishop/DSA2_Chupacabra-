@@ -90,7 +90,9 @@ void MyEntityClass::Update(void)
 	matrix4 m4ToWorld = glm::translate(m_v3Position);
 	m_pMeshManager->AddInstanceToRenderList(m_sName);
 	m_pMeshManager->SetModelMatrix(m4ToWorld, m_sName);
-	//int nIndex = m_pColliderManager->GetIndex(m_sName);
 	m_pColliderManager->DisplayReAlligned(m_sName);
 	m_pColliderManager->SetModelMatrix(m4ToWorld, m_sName);
+
+	// call BOManager check collision
+	m_pColliderManager->Update();
 }

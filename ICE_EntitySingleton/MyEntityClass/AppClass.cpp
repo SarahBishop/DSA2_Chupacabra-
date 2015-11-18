@@ -21,8 +21,8 @@ void AppClass::InitVariables(void)
 	m_pMeshMngr->LoadModel("Minecraft\\MC_Creeper.obj", "Creeper");
 
 	// entity manager singleton
-	entityManager->GenerateNewEntity("Steve", vector3(-15.0f, 0.0f, 0.0f), REAXISX * 0.01f, REAXISX * 0.01f, 1.3f, 0.7f);
-	entityManager->GenerateNewEntity("Creeper", vector3(15.0f, 2.0f, 0.0f), REAXISX * -0.01f, REAXISX * -0.01f, 0.7f, 0.7f);
+	entityManager->GenerateNewEntity("Steve", vector3(-15.0f, 0.0f, 0.0f), REAXISX * 0.001f, REAXISX * 0.001f, 1.3f, 0.7f);
+	entityManager->GenerateNewEntity("Creeper", vector3(15.0f, 0.0f, 0.0f), REAXISX * -0.001f, REAXISX * -0.001f, 0.7f, 0.7f);
 
 	//// Steve Init
 	//m_pSteve = new MyEntityClass("Steve");

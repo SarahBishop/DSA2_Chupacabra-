@@ -4,6 +4,7 @@ MyEntitySingleton* MyEntitySingleton::m_pInstance = nullptr;
 void MyEntitySingleton::Init(void)
 {
 	m_nData = 0;
+	//m_pColliderManager = MyBOManager::GetInstance();
 }
 void MyEntitySingleton::Release(void)
 {
@@ -59,7 +60,12 @@ void MyEntitySingleton::Update()
 	for (int i = 0; i < vectorOfEntities.size(); i++)
 	{
 		vectorOfEntities[i].Update();
+		//m_pColliderManager->DisplayReAlligned(vectorOfEntities[i].m_sName);
+		//m_pColliderManager->SetModelMatrix(vectorOfEntities[i].m_m4ToWorld, vectorOfEntities[i].m_sName);
 	}
+
+	// check collisions
+	//m_pColliderManager->Update();
 }
 
 
