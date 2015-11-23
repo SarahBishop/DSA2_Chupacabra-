@@ -27,7 +27,9 @@ public:
 	float moveMod2; 
 	// acceleration and max limit for accel
 	glm::vec3 v3Acceleration;
-	float fMaxAccel;
+	float fMaxAccel = 0.45f;
+	float fVelMag; // magnitude of velocity
+	float fMass = 1.0f;
 
 	//code for rendering multiple objects with the same model
 	String modelName;

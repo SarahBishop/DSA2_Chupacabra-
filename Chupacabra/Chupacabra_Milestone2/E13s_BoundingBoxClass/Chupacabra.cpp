@@ -19,6 +19,9 @@ Chupacabra::Chupacabra(vector3 pos, String mName)
 	v3ForwardForce = vector3(0.0f, 0.0f, 0.2f);
 	v3Acceleration += v3Gravity;
 	v3Acceleration += v3ForwardForce;
+	
+	// default vel
+	velocity = vector3(0.1f);
 }
 
 void Chupacabra::SetRolling()

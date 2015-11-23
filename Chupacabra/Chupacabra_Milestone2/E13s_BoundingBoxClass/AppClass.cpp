@@ -29,7 +29,7 @@ void AppClass::InitVariables(void)
 	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
 	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
 
-	chupManager->GenerateChupacabras(5, true);
+	chupManager->GenerateChupacabras(4, true);
 
 	canyonManager = new CanyonManager();
 	canyonManager->GenerateCanyon(35);

@@ -15,6 +15,9 @@ public:
 	float farPlane;
 	float cameraDepth = 5.0f; // padding to prevent camera clipping
 
+	// meshmanager
+	MeshManagerSingleton* m_pMeshMngr;
+
 	float segmentZLength;
 
 	CanyonManager();

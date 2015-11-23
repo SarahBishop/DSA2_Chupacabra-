@@ -5,6 +5,7 @@ CanyonManager::CanyonManager()
 	segmentZLength = 8.0f;
 	nearPlane = segmentZLength + cameraDepth;
 	farPlane = 0;
+	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 }
 void CanyonManager::GenerateCanyon(uint nSegments)
 {
@@ -23,6 +24,7 @@ void CanyonManager::Render()
 	{
 		listOfSegments.at(i).Render();
 	}
+	//render the distance fog
 }
 void CanyonManager::Update()
 {

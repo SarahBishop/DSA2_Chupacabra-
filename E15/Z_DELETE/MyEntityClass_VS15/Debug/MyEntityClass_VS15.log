@@ -1,0 +1,67 @@
+﻿Build started 11/20/2015 5:22:08 PM.
+     1>Project "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\MyEntityClassB\MyEntityClass_VS15.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D DEBUG /D _MBCS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\\" /Fd"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\vc140.pdb" /Gd /TP /wd4251 /analyze- /errorReport:prompt /D _CRT_SECURE_NO_WARNINGS AppClass.cpp AppClassControls.cpp Main.cpp MyBOClass.cpp MyBOManager.cpp MyEntityClass.cpp MyEntityManager.cpp
+         MyEntityManager.cpp
+     1>MyEntityManager.cpp(80): warning C4018: '<': signed/unsigned mismatch
+         MyEntityClass.cpp
+         MyBOManager.cpp
+         MyBOClass.cpp
+         Main.cpp
+         AppClassControls.cpp
+         AppClass.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\BTO.res" ..\res\BTO.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15D.exe" /INCREMENTAL /NOLOGO ReEng_VS15_d.lib glu32.lib glew32.lib opengl32.lib "sfml-system.lib" "sfml-window.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15D.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15D.lib" /MACHINE:X86 /PROFILE "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\BTO.res"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\AppClass.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\AppClassControls.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\Main.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\MyBOClass.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\MyBOManager.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\MyEntityClass.obj"
+         "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15\Debug\MyEntityManager.obj"
+     1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
+         MyEntityClass_VS15.vcxproj -> \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\Z_DELETE\MyEntityClass_VS15D.exe
+       PostBuildEvent:
+         mkdir “\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\”
+         xcopy "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\GL\bin" "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary" /y
+         xcopy "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\bin" "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary" /y
+         xcopy "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\SFML\bin\sfml-system-2.dll" "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary" /y
+         xcopy "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\SFML\bin\sfml-window-2.dll" "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary" /y
+         mkdir “\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\”
+         xcopy "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders" "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\Shaders" /y
+         :VCEnd
+         A subdirectory or file \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\ already exists.
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\GL\bin\glew32.dll
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\GL\bin\glut32.dll
+         2 File(s) copied
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\bin\ReEng_VS13.dll
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\bin\ReEng_VS13_d.dll
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\bin\ReEng_VS15.dll
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\RE\bin\ReEng_VS15_d.dll
+         4 File(s) copied
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\SFML\bin\sfml-system-2.dll
+         1 File(s) copied
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\include\SFML\bin\sfml-window-2.dll
+         1 File(s) copied
+         A subdirectory or file \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\ already exists.
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\Basic.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\Basic.vs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\BasicColor.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\BasicColor.vs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\Color.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\Color.vs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\REShader.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\REShader.vs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\REShaderInv.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\REShaderMC.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\TextShader.fs
+         \\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\_Binary\Shaders\TextShader.vs
+         12 File(s) copied
+     1>Done Building Project "\\banner.main.ad.rit.edu\students\arg2502\IGMProfile\Documents\DSA2_Chupacabra-\E15\MyEntityClassB\MyEntityClass_VS15.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:21.55
