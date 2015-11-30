@@ -11,5 +11,16 @@ void Projectile::Move()
 {
 	position += velocity; 
 	//if (position.z < 20.0f)
-	//	Destroy(this); //bad code is bad, but you get the picture
+	//	Release();  //delete this once it's too far away 
+}
+
+void Projectile::Release(void)
+{
+	//bounding->~MyBoundingObjectClass();
+} 
+
+//destroy the bounding object and the object
+Projectile::~Projectile(void)
+{
+	Release();
 }

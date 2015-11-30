@@ -75,6 +75,8 @@ void AppClass::Update(void)
 		player->projectiles.at(i).Move(); 
 		m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
 	}
+
+	player->Countdown(); 
 	
 	// update chupacabras
 	chupManager->Update();

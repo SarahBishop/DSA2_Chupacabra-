@@ -19,6 +19,7 @@ public:
 	int score; //just in case someone's keeping score ;P
 	int throwTimer; //the timer between throws (no spamming every 0.0001 seconds)
 	vector3 position; //this should really just be the camera's position, but I'm including it here for the sake of calculation
+	CameraManagerSingleton* mngr = nullptr;
 
 	static Carlos* GetInstance(); //make Carlos a singleton. There can be only one. 
 
@@ -26,6 +27,7 @@ public:
 	void ThrowObject(vector2 coord); //called when the player clicks, calls GenerateObject() internally
 	void SetPosition(vector3 pos); //sets the position, used for following the camera
 	String ShowScore(); //returns a string to be printed to the screen
+	void Countdown(); //run down the timer that dictates how often an object may be thrown
 	//void RenderThrownObjects(); //render the thrown objects. Duh. 
 
 	String ProveClick(vector2 coords); //DEBUGGING

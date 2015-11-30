@@ -160,8 +160,33 @@ void AppClass::ProcessMouse(void)
 	{
 		//sf::Vector2i coord = sf::Mouse::getPosition(); 
 		//coord = m_pWindow->GetHandler().mapPixelToCoords(coord); 
+
+		//m_m4Camera = m_pCameraMngr->GetCameraPlane(); //Space right in front of the camera forming a plane that covers the window
+
+		//Calculate the position of the mouse in device space [(-1,-1);(1,1)]
+		UINT nMouseX, nMouseY; // Coordinates for the mouse
+		POINT pt;
+		GetCursorPos(&pt);
+		nMouseX = static_cast<int>(pt.x);
+		nMouseY = static_cast<int>(pt.y);
+		float posX = static_cast<float>(nMouseX - m_pSystem->GetWindowX());
+		float posY = static_cast<float>(nMouseY - m_pSystem->GetWindowY());
+		float width = static_cast<float>(m_pSystem->GetWindowWidth());
+		float height = static_cast<float>(m_pSystem->GetWindowHeight());
+		float x = (posX / width - 0.5f) * 2.0f; // [0,w] -> [-1,1]
+		float y = (posY / height - 0.5f) * 2.0f; // [0,h] -> [-1,1]
+		y *= -1;
+		//Translate that to World Space
+		vector4 v4NDC(x, y, -1.0f, 1.0f); //Normalized Device Coordinates
+		glm::mat4 m4InverseVP = glm::inverse(m_pCameraMngr->GetVP()); //inverse of the view projection
+		glm::vec4 v4World = m4InverseVP * v4NDC; //translate device space to world coordinates
+		v4World /= v4World.w;//normalize
+		vector3 m_v3ClickedOn = vector3(v4World);
+
+
 		m_pMeshMngr->PrintLine(player->ProveClick(vector2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y)), REGREEN);
-		player->ThrowObject(vector2(0.0f, 0.0f)); //just until I can map values correctly
+		m_pMeshMngr->PrintLine(player->ProveClick(vector2(m_v3ClickedOn.x, m_v3ClickedOn.y)), REGREEN);
+		player->ThrowObject(vector2(x, y)); //just until I can map values correctly
 	}
 
 	//sf::Mouse::getPosition()
