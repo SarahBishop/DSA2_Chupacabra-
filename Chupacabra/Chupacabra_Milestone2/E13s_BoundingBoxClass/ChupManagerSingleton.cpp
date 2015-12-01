@@ -21,7 +21,7 @@ void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	for (int i = 0; i < numOfChupas; i++)
 	{
-		m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
+		m_pMeshMngr->LoadModel("ChupStuff\\Chup.obj", "Chupacabra");
 	}
 	
 	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
@@ -29,7 +29,7 @@ void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
 	{
 		//I added that -1.0f to the spawn point to try to get the chups closer to the center of the screen
 		//--Sarah 
-		chups.push_back(Chupacabra(vector3((i * -2.0f)), m_pMeshMngr->GetInstanceByIndex(i)->GetName()));
+		chups.push_back(Chupacabra(vector3((i * -2.0f), (i * -4.0f), -6.0f), m_pMeshMngr->GetInstanceByIndex(i)->GetName()));
 		chups[i].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList(m_pMeshMngr->GetNameOfInstanceByIndex(i)), isSphere);
 	}
 }
@@ -63,9 +63,11 @@ void ChupManagerSingleton::Update()
 			chups[i].velocity.y *= -1.0f;
 		}
 		// front wall/camera
-		if (chups[i].position.z > chups[i].myBO->fRadius) // 13 is segmentZLength + cameraDepth from CanyonManager.cpp
+		//if (chups[i].position.z > chups[i].myBO->fRadius) // 13 is segmentZLength + cameraDepth from CanyonManager.cpp
+		if (chups[i].position.z > -4.0f)
 		{
-			chups[i].position.z = chups[i].myBO->fRadius;
+			//chups[i].position.z = chups[i].myBO->fRadius;
+			chups[i].position.z = -4.0f; 
 			chups[i].velocity.z *= -1.0f;
 		}
 	}

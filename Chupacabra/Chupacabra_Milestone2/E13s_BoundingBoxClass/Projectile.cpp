@@ -5,6 +5,8 @@ Projectile::Projectile(vector3 vel, vector3 pos, String mod)
 	velocity = vel; 
 	position = pos; 
 	model = mod; 
+	meshMngr =  MeshManagerSingleton::GetInstance();
+	bounding = new MyBoundingObjectClass(meshMngr->GetVertexList(meshMngr->GetNameOfInstanceByIndex(1)), true);
 }
 
 void Projectile::Move()

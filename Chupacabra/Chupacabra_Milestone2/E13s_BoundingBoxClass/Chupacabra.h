@@ -7,7 +7,7 @@
 #include <math.h>
 #include "MyBoundingObjectClass.h"
 
-#define GRAVITY -0.02f
+#define GRAVITY -0.01f
 
 class Chupacabra {
 

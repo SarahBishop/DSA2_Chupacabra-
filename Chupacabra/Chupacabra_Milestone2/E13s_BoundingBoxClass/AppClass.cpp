@@ -74,7 +74,20 @@ void AppClass::Update(void)
 	{
 		player->projectiles.at(i).Move(); 
 		m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
+		player->projectiles.at(i).bounding->SetModelMatrix(glm::translate(player->projectiles.at(i).position)); //move those bounding objects
 	}
+
+	//check for projectile/chup collisions
+	/*for (int i = 0; i < player->projectiles.size; i++)
+	{
+		for (int j = 0; j < chupManager->chups.size; j++)
+		{
+			if (player->projectiles.at(i).bounding->IsColliding(chupManager->chups[j].myBO))
+			{
+				player->score++;
+			}
+		}
+	}*/
 
 	player->Countdown(); 
 	
