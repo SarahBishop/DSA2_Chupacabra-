@@ -17,13 +17,15 @@ public:
 
 	// meshmanager
 	MeshManagerSingleton* m_pMeshMngr;
+	// system
+	SystemSingleton* m_pSystem;
 
 	float segmentZLength;
 
 	CanyonManager();
 	void GenerateCanyon(uint nSegments);
 	void Render();
-	void Update();
+	void Update(float scaledDeltaTime);
 
 
 };

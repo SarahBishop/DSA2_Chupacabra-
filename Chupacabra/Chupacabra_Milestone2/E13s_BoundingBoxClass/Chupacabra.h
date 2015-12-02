@@ -50,7 +50,7 @@ public:
 	//Destructor
 	//~Chupacabra(); 
 	//Updates the chupacabra's position
-	void Move(); 
+	void Move(float scaledDeltaTime);
 	void SetRolling(); 
 	void Bounce(vector3 otherPos); 
 	void Render();

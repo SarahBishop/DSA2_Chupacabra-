@@ -35,12 +35,18 @@ void AppClass::InitVariables(void)
 	canyonManager->GenerateCanyon(35);
 	cameraFX = new CameraEffect();
 	player = Carlos::GetInstance(); 
+
+	deltaTime = 0.f;
 }
 
 void AppClass::Update(void)
 {
 	//Update the system's time
 	m_pSystem->UpdateTime();
+
+	// std::cout << m_pSystem->LapClock(0) * 64.f; test expected frame-rate
+	deltaTime = m_pSystem->LapClock(0);
+	scaledDT = (float)(deltaTime * TIME_COEFFICIENT);
 
 	//Update the mesh manager's time without updating for collision detection
 	m_pMeshMngr->Update(false);
@@ -52,7 +58,7 @@ void AppClass::Update(void)
 	ArcBall();
 
 	// update canyon
-	canyonManager->Update();
+	canyonManager->Update(scaledDT);
 
 	cameraFX->CameraBob();
 
@@ -72,7 +78,7 @@ void AppClass::Update(void)
 	//draw the projectiles 
 	for (int i = 0; i < player->projectiles.size(); i++)
 	{
-		player->projectiles.at(i).Move(); 
+		player->projectiles.at(i).Move(scaledDT); 
 		m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
 		player->projectiles.at(i).bounding->SetModelMatrix(glm::translate(player->projectiles.at(i).position)); //move those bounding objects
 	}
@@ -89,10 +95,10 @@ void AppClass::Update(void)
 		}
 	}*/
 
-	player->Countdown(); 
+	player->Countdown(scaledDT); 
 	
 	// update chupacabras
-	chupManager->Update();
+	chupManager->Update(scaledDT);
 
 	//Add a representation of the Spheres to the render list
 	vector3 v3Color = REWHITE;

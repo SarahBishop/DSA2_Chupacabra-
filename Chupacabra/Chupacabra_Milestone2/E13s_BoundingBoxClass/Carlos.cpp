@@ -37,20 +37,21 @@ void Carlos::GenerateObject()
 
 void Carlos::ThrowObject(vector2 coord)
 {
-	if (throwTimer <= 0)
+	if (throwTimer <= 0.0f)
 	{
 		vector3 vel = vector3(coord, -1); 
+		vel = vel * 3.0f / (float)vel.length();
 		//vel.x = mngr->GetPosition().x + vel.x;
 		//vel.y = mngr->GetPosition().y - vel.y;
 		Projectile thrown = Projectile(vel, vector3(0.0f, 0.0f, -1.0f), objects.at(0));
 		projectiles.push_back(thrown);
 		//score++;
-		throwTimer = 30;
+		throwTimer = 30.0f;
 	}
 }
 
-void Carlos::Countdown()
+void Carlos::Countdown(float scaledDeltaTime)
 {
 	if (throwTimer > 0)
-		throwTimer--; 
+		throwTimer-=scaledDeltaTime; 
 }

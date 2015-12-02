@@ -16,7 +16,7 @@ Chupacabra::Chupacabra(vector3 pos, String mName)
 
 	// acceleration forces
 	v3Gravity = vector3(0.0f, GRAVITY, 0.0f);
-	v3ForwardForce = vector3(0.0f, 0.0f, 0.2f);
+	v3ForwardForce = vector3(0.0f, 0.0f, 0.0f);
 	v3Acceleration += v3Gravity;
 	v3Acceleration += v3ForwardForce;
 	
@@ -27,11 +27,11 @@ Chupacabra::Chupacabra(vector3 pos, String mName)
 void Chupacabra::SetRolling()
 {
 	rolling = true; 
-	velocity = vector3(2.0f * rand(), 0.0f, 2.0f * rand()); //start bounding on some random path on the x-z plane; no y-bouncing for now
+	velocity = vector3(2.0f * rand(), 0.0f, 2.0f); //start bounding on some random path on the x-z plane; no y-bouncing for now
 		//rand() % num+1
 }
 
-void Chupacabra::Move()
+void Chupacabra::Move(float scaledDeltaTime)
 {
 	//if the Chupacabra is not knocked over yet, 
 	//advance on a sine wave. 
@@ -45,8 +45,8 @@ void Chupacabra::Move()
 		// add all forces
 		//v3Acceleration += v3Gravity;
 		//v3Acceleration += v3ForwardForce;
-		velocity += v3Acceleration;
-		position += velocity; 
+		velocity += v3Acceleration * scaledDeltaTime;
+		position += velocity * scaledDeltaTime;
 	//}
 }
 

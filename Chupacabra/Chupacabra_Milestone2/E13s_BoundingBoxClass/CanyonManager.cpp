@@ -6,6 +6,8 @@ CanyonManager::CanyonManager()
 	nearPlane = segmentZLength + cameraDepth;
 	farPlane = 0;
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
+	m_pSystem = SystemSingleton::GetInstance(); 
+	//m_pSystem->AddClock();
 }
 void CanyonManager::GenerateCanyon(uint nSegments)
 {
@@ -26,16 +28,16 @@ void CanyonManager::Render()
 	}
 	//render the distance fog
 }
-void CanyonManager::Update()
+void CanyonManager::Update(float scaledDeltaTime)
 {
 	for (int i = 0; i < listOfSegments.size(); i++)
 	{
-		listOfSegments.at(i).v3Position -= vector3(0.0f, 0.0f, 1.0f);
+		listOfSegments.at(i).v3Position -= scaledDeltaTime * vector3(0.0f, 0.0f, 1.0f);
 
 		// clipping planes
 		if (listOfSegments.at(i).v3Position.z <= farPlane)
 		{
-			listOfSegments.at(i).v3Position = vector3(0.0f, 0.0f, nearPlane);
+			listOfSegments.at(i).v3Position = vector3(0.0f, 0.0f, nearPlane + (listOfSegments.at(i).v3Position.z - farPlane) );
 			
 			//change canyon color
 			float brightness = (rand() % 399 + 600) / 1000.f; // originally (rand() % 399 + 400) / 1000.f

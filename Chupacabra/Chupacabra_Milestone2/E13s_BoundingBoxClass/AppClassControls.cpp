@@ -2,7 +2,7 @@
 void AppClass::ProcessKeyboard(void)
 {
 	bool bModifier = false;
-	float fSpeed = 0.01f;
+	float fSpeed = 0.01f * scaledDT;
 
 #pragma region ON PRESS/RELEASE DEFINITION
 	static bool	bLastF1 = false, bLastF2 = false, bLastF3 = false, bLastF4 = false, bLastF5 = false,
@@ -22,7 +22,7 @@ void AppClass::ProcessKeyboard(void)
 #pragma endregion
 
 #pragma region Camera Positioning
-	if(bModifier)
+	if(true)
 		fSpeed *= 10.0f;
 	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCameraMngr->MoveForward(fSpeed);*/
@@ -164,7 +164,7 @@ void AppClass::ProcessMouse(void)
 		//m_m4Camera = m_pCameraMngr->GetCameraPlane(); //Space right in front of the camera forming a plane that covers the window
 
 		//Calculate the position of the mouse in device space [(-1,-1);(1,1)]
-		UINT nMouseX, nMouseY; // Coordinates for the mouse
+		int nMouseX, nMouseY; // Coordinates for the mouse
 		POINT pt;
 		GetCursorPos(&pt);
 		nMouseX = static_cast<int>(pt.x);
@@ -184,7 +184,7 @@ void AppClass::ProcessMouse(void)
 		vector3 m_v3ClickedOn = vector3(v4World);
 
 
-		m_pMeshMngr->PrintLine(player->ProveClick(vector2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y)), REGREEN);
+		m_pMeshMngr->PrintLine(player->ProveClick(vector2(posX, posY)), REGREEN);
 		m_pMeshMngr->PrintLine(player->ProveClick(vector2(m_v3ClickedOn.x, m_v3ClickedOn.y)), REGREEN);
 		player->ThrowObject(vector2(x, y)); //just until I can map values correctly
 	}

@@ -26,6 +26,8 @@ class AppClass : public ReEngAppClass
 	CanyonManager* canyonManager = nullptr;
 	ChupManagerSingleton* chupManager = nullptr; 
 	Carlos* player = nullptr; 
+	double deltaTime; // measures the time between frames for cpu-independent calculations
+	float scaledDT; // delta time scaled to be approx 1.0 on most computers
 
 	vector3 m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
 	vector3 m_v3O2 = vector3( 2.5f, 0.0f, 0.0f);
@@ -33,6 +35,8 @@ class AppClass : public ReEngAppClass
 	CameraEffect* cameraFX = nullptr;
 
 public:
+	const float TIME_COEFFICIENT = 64.f;
+
 	typedef ReEngAppClass super;
 
 	/* Constructor */
