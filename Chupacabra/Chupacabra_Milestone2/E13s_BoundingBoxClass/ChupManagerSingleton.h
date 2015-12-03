@@ -8,6 +8,7 @@
 class ChupManagerSingleton{
 
 	static ChupManagerSingleton* instance;
+	float chupSpawnTimer = 0.f;
 	
 public: 
 	static ChupManagerSingleton* GetInstance(); //gotta make a singleton
@@ -32,6 +33,10 @@ public:
 	void Update(float scaledDeltaTime);
 	void GenerateChupacabras(uint numOfChups, bool isSphere);
 	void Render();
+	void SpawnNewChups(float scaledDeltaTime);
+	void RecycleChups();
+	// set chup to starting position
+	void ResetChup(Chupacabra* chup);
 
 	// find out who's colliding
 	void CheckCollisions();

@@ -33,6 +33,7 @@ void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
 		//I added that -1.0f to the spawn point to try to get the chups closer to the center of the screen
 		//--Sarah 
 		chups.push_back(Chupacabra(vector3((i * -2.0f), (i * -4.0f), -36.0f), m_pMeshMngr->GetInstanceByIndex(i)->GetName()));
+		ResetChup(&chups[chups.size() - 1]);
 		chups[i].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList(m_pMeshMngr->GetNameOfInstanceByIndex(i)), isSphere);
 
 		// push new vector<int> to colliding indices vector
@@ -43,7 +44,7 @@ void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
 void ChupManagerSingleton::Update(float scaledDeltaTime)
 {
 	// clear collision list
-	for (uint nObject = 0; nObject < chups.size(); nObject++)
+	for (uint nObject = 0; nObject < m_llCollidingIndices.size(); nObject++)
 	{
 		m_llCollidingIndices[nObject].clear();
 	}
@@ -57,32 +58,36 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 	// keep chups inside canyon
 	for (int i = 0; i < chups.size(); i++)
 	{
-		// left wall
-		if (chups[i].position.x < -5.0f + chups[i].myBO->fRadius) // -5 is the left canyon wall's position
-		{
-			chups[i].position.x = -5.0f + chups[i].myBO->fRadius;
-			chups[i].velocity.x *= -1.0f;
-		}
-		// right wall
-		else if (chups[i].position.x > 5.0f - chups[i].myBO->fRadius)
-		{
-			chups[i].position.x = 5.0f - chups[i].myBO->fRadius;
-			chups[i].velocity.x *= -1.0f;
+		// wall height
+		if (chups[i].position.y < 10.f) {
+
+
+			// left wall
+			if (chups[i].position.x < -5.0f + chups[i].myBO->fRadius) // -5 is the left canyon wall's position
+			{
+				chups[i].position.x = -5.0f + chups[i].myBO->fRadius;
+				chups[i].velocity.x *= -1.0f;
+			}
+			// right wall
+			else if (chups[i].position.x > 5.0f - chups[i].myBO->fRadius)
+			{
+				chups[i].position.x = 5.0f - chups[i].myBO->fRadius;
+				chups[i].velocity.x *= -1.0f;
+			}
 		}
 		// floor
 		if (chups[i].position.y < -1.0f + chups[i].myBO->fRadius)
 		{
 			chups[i].position.y = -1.0f + chups[i].myBO->fRadius;
-			chups[i].velocity.y *= -1.0f;
+			chups[i].velocity.y *= -.70f;
 		}
 		// front wall/camera
 		//if (chups[i].position.z > chups[i].myBO->fRadius) // 13 is segmentZLength + cameraDepth from CanyonManager.cpp
 		if (chups[i].position.z > 10.0f)
 		{
 			//chups[i].position.z = chups[i].myBO->fRadius;
-			std::cout << " GAME OVER ";
-			chups[i].position.z = -50.0f; // set chup back
-			chups[i].position.y = 2.0f;
+			//std::cout << " GAME OVER ";
+			ResetChup(&chups[i]);
 			//chups[i].velocity = vector3(2.0f - rand(), 0.0f, 0.02f); // reset velocity
 			//chups[i].velocity.z *= -1.0f; // reverse
 		}
@@ -253,8 +258,51 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 
 				}
 			}
-
 		}
+	}
+
+	SpawnNewChups(scaledDeltaTime);
+	RecycleChups();
+}
+
+void ChupManagerSingleton::ResetChup(Chupacabra* chup) {
+	
+	chup->position = vector3(-6, 20, -40);//vector3(-2.0f, 10.0f, -30.f);
+	chup->velocity = vector3(2,0,0.2);
+	std::cout << " " << chup->position.z;
+}
+
+void ChupManagerSingleton::SpawnNewChups(float scaledDeltaTime) {
+	if (chups.size() < 100) {
+		chupSpawnTimer += scaledDeltaTime;
+		// scaled time is approx 1.0 per frame, so 700 = 700 frames. NOT 700ms.
+		if (chupSpawnTimer > 500) {
+			chupSpawnTimer -= 500;
+			chups.push_back(Chupacabra(vector3(0), "Chupacabra"));
+			ResetChup(&chups[chups.size() - 1]);
+			std::cout << "about to crash ;)";
+			ResetChup(&chups[chups.size() -1]);
+			chups[chups.size() - 1].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra"), true);
+		}
+		// push new vector<int> to colliding indices vector
+		std::vector<int> lVector;
+		m_llCollidingIndices.push_back(lVector);
+	}
+}
+void ChupManagerSingleton::RecycleChups() {
+	int recycle = -1;
+	for (int i = 0; i < chups.size(); i++) {
+		if (chups[i].position.z < -60) {
+			if (chups.size() < 1) {
+				return;
+			}
+			std::cout << " " << i << " out of bounds: " << chups[i].position.z << ". Recycling... ";
+			recycle = i;
+			break;
+		}
+	}
+	if (recycle > -1) {
+		ResetChup(&chups[recycle]);
 	}
 }
 void ChupManagerSingleton::Render()

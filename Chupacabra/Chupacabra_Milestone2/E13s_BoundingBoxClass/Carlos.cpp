@@ -43,7 +43,7 @@ void Carlos::ThrowObject(vector2 coord)
 		vel = vel * 3.0f / (float)vel.length();
 		//vel.x = mngr->GetPosition().x + vel.x;
 		//vel.y = mngr->GetPosition().y - vel.y;
-		Projectile thrown = Projectile(vel, vector3(0.0f, 0.0f, -1.0f), objects.at(0));
+		Projectile thrown = Projectile(vel, vector3(0.0f, 0.0f, 10.0f), objects.at(0));
 		projectiles.push_back(thrown);
 		//score++;
 		throwTimer = 30.0f;
