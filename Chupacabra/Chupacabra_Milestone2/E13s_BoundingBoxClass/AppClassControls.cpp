@@ -150,11 +150,11 @@ void AppClass::ProcessMouse(void)
 	m_bArcBall = false;
 	m_bFPC = false;
 	
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
-		m_bArcBall = true;
+	/*if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
+		m_bArcBall = true;*/
 	
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
-		m_bFPC = true;
+	/*if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+		m_bFPC = true;*/
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
