@@ -8,7 +8,7 @@ Projectile::Projectile(vector3 vel, vector3 pos, String mod)
 	position = pos; 
 	acceleration = vector3(0, GRAVITY, 0);
 	fMaxAccel = 1.0f;
-	fMass = 0.5f;
+	fMass = 4.f;
 	fVelMag = 1.0f;
 	model = mod; 
 	meshMngr =  MeshManagerSingleton::GetInstance();

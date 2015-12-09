@@ -73,13 +73,26 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 			{
 				chups[i].position.x = 5.0f - chups[i].myBO->fRadius;
 				chups[i].velocity.x *= -1.0f;
+
 			}
 		}
 		// floor
 		if (chups[i].position.y < -1.0f + chups[i].myBO->fRadius)
 		{
 			chups[i].position.y = -1.0f + chups[i].myBO->fRadius;
-			chups[i].velocity.y *= -.70f;
+			if (chups[i].state = chups[i].CHASING)
+				chups[i].velocity.y *= -0.7f;
+			if (chups[i].state = chups[i].BOUNCING)
+				chups[i].velocity.y *= -1.0f;
+			if (chups[i].state = chups[i].SPAWNING) {
+				// the fisrt time the chup hits the ground
+				chups[i].velocity.y *= -1.0f;// / chups[i].velocity.y;
+				// stop lightning fast sideways movement
+				chups[i].velocity.x = 0.f;
+				// chase player
+				chups[i].state = chups[i].CHASING;
+			}
+				
 		}
 		// front wall/camera
 		//if (chups[i].position.z > chups[i].myBO->fRadius) // 13 is segmentZLength + cameraDepth from CanyonManager.cpp
@@ -214,6 +227,9 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 				if (fDistanceMag < fRadiusSquared)
 				{
 					std::cout << " chup " << j << " hit ";
+
+					chups[j].state = chups[j].BOUNCING;
+
 					// normalize fDistance vector
 					glm::vec3 n = v3Distance / (sqrt(fDistanceMag));
 
@@ -268,8 +284,9 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 void ChupManagerSingleton::ResetChup(Chupacabra* chup) {
 	
 	chup->position = vector3(-6, 20, -40);//vector3(-2.0f, 10.0f, -30.f);
-	chup->velocity = vector3(2,0,0.2);
+	chup->velocity = vector3(0.2,0,0.2);
 	std::cout << " " << chup->position.z;
+	chup->state = chup->SPAWNING;
 }
 
 void ChupManagerSingleton::SpawnNewChups(float scaledDeltaTime) {

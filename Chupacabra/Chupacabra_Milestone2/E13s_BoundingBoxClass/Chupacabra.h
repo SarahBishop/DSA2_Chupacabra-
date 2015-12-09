@@ -30,6 +30,8 @@ public:
 	float fMaxAccel = 0.45f;
 	float fVelMag; // magnitude of velocity
 	float fMass = 1.0f;
+	enum State { SPAWNING, CHASING, BOUNCING };
+	State state = SPAWNING;
 
 	//code for rendering multiple objects with the same model
 	String modelName;
