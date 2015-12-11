@@ -8,11 +8,13 @@ Projectile::Projectile(vector3 vel, vector3 pos, String mod)
 	position = pos; 
 	acceleration = vector3(0, GRAVITY, 0);
 	fMaxAccel = 1.0f;
-	fMass = 4.f;
+	fMass = 0.5f;
 	fVelMag = 1.0f;
 	model = mod; 
 	meshMngr =  MeshManagerSingleton::GetInstance();
 	bounding = new MyBoundingObjectClass(meshMngr->GetVertexList(meshMngr->GetNameOfInstanceByIndex(1)), true);
+	lifeTime = 0.f;
+	killMe = false;
 }
 
 void Projectile::Move(float scaledDT)
@@ -46,6 +48,12 @@ void Projectile::Move(float scaledDT)
 		position.z = 1 - 10;
 		velocity.z *= -1.0f;
 	}*/
+
+	lifeTime += scaledDT;
+
+	if (lifeTime > 300.f) {
+		killMe = true;
+	}
 }
 
 void Projectile::Release(void)

@@ -8,7 +8,7 @@ Carlos::Carlos()
 	score = 0; 
 	objects.push_back("Planets\\00_Sun.obj");
 	throwTimer = 0;
-	mngr = CameraManagerSingleton::GetInstance();;
+	mngr = CameraManagerSingleton::GetInstance();
 }
 
 Carlos* Carlos::GetInstance()
@@ -43,15 +43,26 @@ void Carlos::ThrowObject(vector2 coord)
 		vel = vel * 3.0f / (float)vel.length();
 		//vel.x = mngr->GetPosition().x + vel.x;
 		//vel.y = mngr->GetPosition().y - vel.y;
-		Projectile thrown = Projectile(vel, vector3(0.0f, 0.0f, 10.0f), objects.at(0));
+		Projectile thrown = Projectile(vel, vector3(0.0f, 1.0f, 10.0f), objects.at(0));
 		projectiles.push_back(thrown);
 		//score++;
-		throwTimer = 30.0f;
+		throwTimer = 10.0f;
 	}
 }
 
 void Carlos::Countdown(float scaledDeltaTime)
 {
+	if (projectiles.size() > 0) {
+		if (projectiles[0].killMe) {
+			DeleteFirstProjectile();
+		}
+	}
 	if (throwTimer > 0)
-		throwTimer-=scaledDeltaTime; 
+		throwTimer -= scaledDeltaTime;
+}
+
+void Carlos::DeleteFirstProjectile() {
+	if (projectiles.size() > 0) {
+		projectiles.pop_back();
+	}
 }

@@ -1,6 +1,6 @@
 #include "Chupacabra.h"
 
-Chupacabra::Chupacabra(vector3 pos, String mName)
+Chupacabra::Chupacabra(vector3 pos, String mName, String mFLName, String mBLName)
 {
 	rolling = false; 
 	position = pos; 
@@ -13,6 +13,8 @@ Chupacabra::Chupacabra(vector3 pos, String mName)
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 
 	modelName = mName;
+	frontLegModelName = mFLName;
+	backLegModelName = mBLName;
 
 	// acceleration forces
 	v3Gravity = vector3(0.0f, GRAVITY, 0.0f);
@@ -27,27 +29,31 @@ Chupacabra::Chupacabra(vector3 pos, String mName)
 void Chupacabra::SetRolling()
 {
 	rolling = true; 
-	velocity = vector3(2.0f * rand(), 0.0f, 2.0f); //start bounding on some random path on the x-z plane; no y-bouncing for now
+	//velocity = vector3(2.0f * rand(), 0.0f, 2.0f); //start bounding on some random path on the x-z plane; no y-bouncing for now
 		//rand() % num+1
 }
 
 void Chupacabra::Move(float scaledDeltaTime)
 {
-	//if the Chupacabra is not knocked over yet, 
-	//advance on a sine wave. 
-	//else roll according to velocity 
-	/*if (!rolling)
-	{
-		position = vector3(position.x, position.y + moveMod1 * sinf(moveMod2 * time(time_t(NULL))), position.z); 
+	velocity += v3Acceleration * scaledDeltaTime;
+	position += velocity * scaledDeltaTime;
+
+	// animate legs
+	if (frontLegsForward) {
+		frontLegAngle += 5 * scaledDeltaTime;
+		backLegAngle -= 5 * scaledDeltaTime;
 	}
-	else
-	{*/
-		// add all forces
-		//v3Acceleration += v3Gravity;
-		//v3Acceleration += v3ForwardForce;
-		velocity += v3Acceleration * scaledDeltaTime;
-		position += velocity * scaledDeltaTime;
-	//}
+	else {
+		frontLegAngle -= 5 * scaledDeltaTime;
+		backLegAngle += 5 * scaledDeltaTime;
+	}
+
+	if (frontLegAngle > 70) {
+		frontLegsForward = false;
+	}
+	if (frontLegAngle < 20) {
+		frontLegsForward = true;
+	}
 }
 
 void Chupacabra::Bounce(vector3 otherPos)
@@ -68,5 +74,9 @@ void Chupacabra::Render()
 	//vector4 tempV4 = vector4(position.x, position.y, position.z, 1);
 	//m_pMeshMngr->AddSphereToQueue(glm::translate(position),REWHITE);
 	m_pMeshMngr->AddInstanceToRenderList(modelName);
+	m_pMeshMngr->AddInstanceToRenderList(frontLegModelName);
+	m_pMeshMngr->AddInstanceToRenderList(backLegModelName);
 	m_pMeshMngr->SetModelMatrix(glm::translate(position), modelName);
+	m_pMeshMngr->SetModelMatrix(glm::translate(position)*glm::rotate(frontLegAngle, vector3(1, 0, 0)), frontLegModelName);
+	m_pMeshMngr->SetModelMatrix(glm::translate(position)*glm::rotate(backLegAngle, vector3(1, 0, 0)), backLegModelName);
 }

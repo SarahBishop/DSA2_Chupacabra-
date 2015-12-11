@@ -28,7 +28,6 @@ public:
 	MeshManagerSingleton* m_pMeshMngr; // for rendering multiple chups with one model
 	// I know this is awful practice but I'm going to have to do this for now
 	Carlos* carlosInstance = nullptr;
-
 	// update Chupacabras
 	void Update(float scaledDeltaTime);
 	void GenerateChupacabras(uint numOfChups, bool isSphere);

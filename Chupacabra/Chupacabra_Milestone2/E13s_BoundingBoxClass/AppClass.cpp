@@ -29,7 +29,7 @@ void AppClass::InitVariables(void)
 	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
 	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
 
-	chupManager->GenerateChupacabras(4, true);
+	chupManager->GenerateChupacabras(1, true);
 
 	canyonManager = new CanyonManager();
 	canyonManager->GenerateCanyon(35);
@@ -72,7 +72,7 @@ void AppClass::Update(void)
 	//instance->objects[1]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra2"));
 	for (int i = 0; i < chupManager->chups.size(); i++)
 	{
-		chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));//m_pMeshMngr->GetModelMatrix("Chupacabra"));
+		chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));
 	}
 
 	//draw the projectiles 
@@ -138,7 +138,7 @@ void AppClass::Update(void)
 	m_pMeshMngr->PrintLine(player->ShowScore(), REWHITE); 
 
 	//Adds all loaded instance to the render list
-	m_pMeshMngr->AddInstanceToRenderList("ALL");
+	//m_pMeshMngr->AddInstanceToRenderList("ALL");
 
 	////Indicate the FPS
 	//int nFPS = m_pSystem->GetFPS();

@@ -35,6 +35,13 @@ public:
 
 	//code for rendering multiple objects with the same model
 	String modelName;
+	String frontLegModelName;
+	String backLegModelName;
+
+	// legs
+	bool frontLegsForward = false;
+	float frontLegAngle = 0.f;
+	float backLegAngle = 0.f;
 
 	// forces
 	glm::vec3 v3Gravity;
@@ -48,7 +55,7 @@ public:
 	//float fRadius;
 
 	//Constructor
-	Chupacabra(vector3 pos, String mName); 
+	Chupacabra(vector3 pos, String mName, String mFLName, String mBLName); 
 	//Destructor
 	//~Chupacabra(); 
 	//Updates the chupacabra's position

@@ -18,12 +18,13 @@ public:
 	String model; 
 	MyBoundingObjectClass* bounding; //not using this for now, but it's here as a reminder
 	MeshManagerSingleton* meshMngr; 
-
 	MyBoundingObjectClass* myBO;
 
 	Projectile(vector3 vel, vector3 pos, String mod); //just to make things less obnoxious, include these in the constructor
 	void Move(float scaledDeltaTime); //advance according to velocity
 
+	float lifeTime;
+	bool killMe = false;
 
 	void Release(void); 
 	~Projectile(void); //we need a destructor for these guys 

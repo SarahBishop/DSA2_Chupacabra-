@@ -18,6 +18,7 @@ public:
 	int health; //the health of the player; detract from it every time a chup catches up
 	int score; //just in case someone's keeping score ;P
 	float throwTimer; //the timer between throws (no spamming every 0.0001 seconds)
+	float despawnTimer; // the timer that deletes projectiles that have been around too long
 	vector3 position; //this should really just be the camera's position, but I'm including it here for the sake of calculation
 	CameraManagerSingleton* mngr = nullptr;
 
@@ -29,6 +30,7 @@ public:
 	String ShowScore(); //returns a string to be printed to the screen
 	void Countdown(float scaledDeltaTime); //run down the timer that dictates how often an object may be thrown
 	//void RenderThrownObjects(); //render the thrown objects. Duh. 
+	void DeleteFirstProjectile();
 
 	String ProveClick(vector2 coords); //DEBUGGING
 

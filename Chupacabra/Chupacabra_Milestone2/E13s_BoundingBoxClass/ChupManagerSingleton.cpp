@@ -14,27 +14,42 @@ ChupManagerSingleton* ChupManagerSingleton::GetInstance()
 ChupManagerSingleton::ChupManagerSingleton()
 {
 	instance = nullptr; 
-}
-void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
-{
 	//code for rendering multiple chups with one model
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	//carlos
 	carlosInstance = Carlos::GetInstance();
 
-	for (int i = 0; i < numOfChupas; i++)
-	{
-		m_pMeshMngr->LoadModel("ChupStuff\\Chup.obj", "Chupacabra");
-	}
+	// full chup with legs for height reference
+	m_pMeshMngr->LoadModel("ChupStuff\\Chup.obj", "ChupacabraFull");
+	srand(time(NULL));
 	
-	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
+		m_pMeshMngr->LoadModel("ChupStuff\\ChupTorso.obj", "Chupacabra");
+		m_pMeshMngr->LoadModel("ChupStuff\\ChupLegs.obj", "ChupacabraFrontLegs");
+		m_pMeshMngr->LoadModel("ChupStuff\\ChupLegs.obj", "ChupacabraBackLegs");
+	
+}
+void ChupManagerSingleton::GenerateChupacabras(uint numOfChupas, bool isSphere)
+{
+	// get the number of chups
+	int existingNumChups = chups.size();
+
 	for (int i = 0; i < numOfChupas; i++)
 	{
 		//I added that -1.0f to the spawn point to try to get the chups closer to the center of the screen
 		//--Sarah 
-		chups.push_back(Chupacabra(vector3((i * -2.0f), (i * -4.0f), -36.0f), m_pMeshMngr->GetInstanceByIndex(i)->GetName()));
-		ResetChup(&chups[chups.size() - 1]);
-		chups[i].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList(m_pMeshMngr->GetNameOfInstanceByIndex(i)), isSphere);
+		//std::cout << m_pMeshMngr->GetInstanceByIndex(3 * i + 1)->GetName() << " " << m_pMeshMngr->GetInstanceByIndex(3 * i + 2)->GetName() << " " << m_pMeshMngr->GetInstanceByIndex(3 * i + 3)->GetName();
+		// create a chupa with a unique mesh ID
+		// the mesh ID is i*3+1 because it loads one full and then three of each torso, front, and back legs
+		chups.push_back(
+			Chupacabra(
+				vector3((i * -2.0f), (i * -4.0f), -36.0f), 
+				"Chupacabra",
+				"ChupacabraFrontLegs",
+				"ChupacabraBackLegs"
+			)
+		);
+		ResetChup(&chups[i]);
+		chups[existingNumChups + i].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("ChupacabraFull"), isSphere);
 
 		// push new vector<int> to colliding indices vector
 		std::vector<int> lVector;
@@ -80,13 +95,20 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 		if (chups[i].position.y < -1.0f + chups[i].myBO->fRadius)
 		{
 			chups[i].position.y = -1.0f + chups[i].myBO->fRadius;
-			if (chups[i].state = chups[i].CHASING)
-				chups[i].velocity.y *= -0.7f;
-			if (chups[i].state = chups[i].BOUNCING)
+			// chasing
+			if (chups[i].state == chups[i].CHASING) {
+				chups[i].velocity.y *= -0.8f;
+			}
+			// bouncing
+			if (chups[i].state == chups[i].BOUNCING)
+			{
 				chups[i].velocity.y *= -1.0f;
-			if (chups[i].state = chups[i].SPAWNING) {
+				chups[i].velocity.z += -0.1f;
+			}
+			// spawning
+			if (chups[i].state == chups[i].SPAWNING) {
 				// the fisrt time the chup hits the ground
-				chups[i].velocity.y *= -1.0f;// / chups[i].velocity.y;
+				chups[i].velocity.y = -0.4f;// / chups[i].velocity.y;
 				// stop lightning fast sideways movement
 				chups[i].velocity.x = 0.f;
 				// chase player
@@ -228,7 +250,10 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 				{
 					std::cout << " chup " << j << " hit ";
 
-					chups[j].state = chups[j].BOUNCING;
+					if (chups[j].state != chups[j].BOUNCING) {
+						carlosInstance->score += 100;
+						chups[j].state = chups[j].BOUNCING;
+					}
 
 					// normalize fDistance vector
 					glm::vec3 n = v3Distance / (sqrt(fDistanceMag));
@@ -282,9 +307,15 @@ void ChupManagerSingleton::Update(float scaledDeltaTime)
 }
 
 void ChupManagerSingleton::ResetChup(Chupacabra* chup) {
+	if (rand() % 2 > 0) {
+		chup->position = vector3(6, 20 + rand() % 10, -40 - rand()%10 );//vector3(-2.0f, 10.0f, -30.f);
+		chup->velocity = vector3(-0.2, 0, 0.2);
+	}
+	else {
+		chup->position = vector3(-6, 20 + rand() % 10, -40 - rand() % 10 );//vector3(-2.0f, 10.0f, -30.f);
+		chup->velocity = vector3(0.2, 0, 0.2);
+	}
 	
-	chup->position = vector3(-6, 20, -40);//vector3(-2.0f, 10.0f, -30.f);
-	chup->velocity = vector3(0.2,0,0.2);
 	std::cout << " " << chup->position.z;
 	chup->state = chup->SPAWNING;
 }
@@ -295,21 +326,14 @@ void ChupManagerSingleton::SpawnNewChups(float scaledDeltaTime) {
 		// scaled time is approx 1.0 per frame, so 700 = 700 frames. NOT 700ms.
 		if (chupSpawnTimer > 500) {
 			chupSpawnTimer -= 500;
-			chups.push_back(Chupacabra(vector3(0), "Chupacabra"));
-			ResetChup(&chups[chups.size() - 1]);
-			std::cout << "about to crash ;)";
-			ResetChup(&chups[chups.size() -1]);
-			chups[chups.size() - 1].myBO = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra"), true);
+			GenerateChupacabras(1, true);
 		}
-		// push new vector<int> to colliding indices vector
-		std::vector<int> lVector;
-		m_llCollidingIndices.push_back(lVector);
 	}
 }
 void ChupManagerSingleton::RecycleChups() {
 	int recycle = -1;
 	for (int i = 0; i < chups.size(); i++) {
-		if (chups[i].position.z < -60) {
+		if (chups[i].position.z < -70) {
 			if (chups.size() < 1) {
 				return;
 			}
