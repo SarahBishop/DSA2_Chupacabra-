@@ -43,99 +43,28 @@ void AppClass::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(fSpeed);*/
 #pragma endregion
 
-/*#pragma region Creeper Control
-	if (bModifier)
-		fSpeed *= 10.0f;
-	// if canCollide, bounce off and move other object
-	if (instance->canCollide)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			if (gameState == Start)
+			{
+				gameState = Game;
+				m_pSystem->LapClock(0); 
+			}
+			
+			if (gameState == Pause)
+			{
+				gameState = Game;
+				m_pSystem->LapClock(0);
+			}
+		}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			m_v3O1.x -= 0.1f;
-
-			// if collision, push back
-			if (instance->objects[0]->isColliding)
-			{
-				m_v3O1.x += 0.101f;
-				m_v3O2.x -= 0.101f; // move other object
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			m_v3O1.x += 0.1f;
-
-			// if collision, push back
-			if (instance->objects[0]->isColliding)
-			{
-				m_v3O1.x -= 0.101f;
-				m_v3O2.x += 0.101f; // move other object
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			m_v3O1.y -= 0.1f;
-
-			// if collision, push back
-			if (instance->objects[0]->isColliding)
-			{
-				m_v3O1.y += 0.101f;
-				m_v3O2.y -= 0.101f; // move other object
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			m_v3O1.y += 0.1f;
-
-			// if collision, push back
-			if (instance->objects[0]->isColliding)
-			{
-				m_v3O1.y -= 0.101f;
-				m_v3O2.y += 0.101f; // move other object
-			}
-		}
+		if (gameState == Game)
+			gameState = Pause; 
 	}
-	// normal movement
-	else
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			m_v3O1.x -= 0.1f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			m_v3O1.x += 0.1f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			m_v3O1.y -= 0.1f;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			m_v3O1.y += 0.1f;
-		}
-	}
-#pragma endregion*/
 
-#pragma region Manager Control
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
-		instance->ToggleVisibility(); 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
-		instance->ToggleAABB(); 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		instance->ToggleResolution();*/
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && instance->objects.size() < 1)
-		instance->objects[0]->ToggleVisible(); 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && instance->objects.size() < 2)
-		instance->objects[1]->ToggleVisible();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && instance->objects.size() < 3)
-		instance->objects[2]->ToggleVisible();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && instance->objects.size() < 4)
-		instance->objects[3]->ToggleVisible();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && instance->objects.size() < 5)
-		instance->objects[4]->ToggleVisible();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && instance->objects.size() < 6)
-		instance->objects[5]->ToggleVisible();*/
-#pragma endregion
+
 
 #pragma region Other Actions
 	ON_KEY_PRESS_RELEASE(Escape, NULL, PostMessage(m_pWindow->GetHandler(), WM_QUIT, NULL, NULL));
@@ -184,8 +113,6 @@ void AppClass::ProcessMouse(void)
 		vector3 m_v3ClickedOn = vector3(v4World);
 
 
-		m_pMeshMngr->PrintLine(player->ProveClick(vector2(posX, posY)), REGREEN);
-		m_pMeshMngr->PrintLine(player->ProveClick(vector2(m_v3ClickedOn.x, m_v3ClickedOn.y)), REGREEN);
 		player->ThrowObject(vector2(x, y)); //just until I can map values correctly
 	}
 

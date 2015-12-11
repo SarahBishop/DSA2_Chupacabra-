@@ -19,6 +19,14 @@ Date: 2015/09
 
 using namespace ReEng; //Using ReEng namespace to use all the classes in the dll
 
+enum GameState
+{
+	Start, 
+	Game, 
+	Pause, 
+	GameOver
+};
+
 class AppClass : public ReEngAppClass
 {
 	MyBoundingObjectClass* m_pBB1 = nullptr;
@@ -38,6 +46,9 @@ class AppClass : public ReEngAppClass
 	MyOctant* pChild = nullptr;
 
 public:
+	bool starting = true; 
+	GameState gameState; //This tracks the state of the program using the GameState Enum
+	
 	const float TIME_COEFFICIENT = 64.f;
 
 	typedef ReEngAppClass super;

@@ -11,9 +11,11 @@ void AppClass::InitWindow(String a_sWindowName)
 
 void AppClass::InitVariables(void)
 {
+	gameState = Game; 
+	
 	//Initialize positions
-	m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
-	m_v3O2 = vector3(2.5f, 0.0f, 0.0f);
+	//m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
+	//m_v3O2 = vector3(2.5f, 0.0f, 0.0f);
 
 	chupManager = ChupManagerSingleton::GetInstance();
 
@@ -85,69 +87,94 @@ void AppClass::RecurseSO(MyOctant* node)
 }
 void AppClass::Update(void)
 {
-	//Update the system's time
-	m_pSystem->UpdateTime();
-
-	// std::cout << m_pSystem->LapClock(0) * 64.f; test expected frame-rate
-	deltaTime = m_pSystem->LapClock(0);
-	scaledDT = (float)(deltaTime * TIME_COEFFICIENT);
-
-	//Update the mesh manager's time without updating for collision detection
-	m_pMeshMngr->Update(false);
-
-	//First person camera movement
-	if (m_bFPC == true)
-		CameraRotation();
-
-	ArcBall();
-
-	// navigate through the octtree
-	chupManager->ClearIndices();
-	//m_pRoot->ClearList();
-	for (int i = 0; i < 8; i++)
+	if (gameState == Start)
 	{
-		pChild = m_pRoot->GetChild(i);
-		//pChild->ClearList();
+		m_pMeshMngr->Print("Welcome to ", REWHITE); 
+		m_pMeshMngr->PrintLine("CHUPACABRA", RERED);
+		m_pMeshMngr->PrintLine("", REWHITE);
+		m_pMeshMngr->PrintLine("Controls:", REWHITE);
+		m_pMeshMngr->PrintLine("-Click to throw golf balls in defense of your goat!", REWHITE);
+		m_pMeshMngr->PrintLine("-Press Spacebar to start \'P\' to pause wile in-game", REWHITE);
+		m_pMeshMngr->PrintLine("-GET A GOOD SCORE!!!", REWHITE);
+	}
+	else if (gameState == Game)
+	{
+		//Update the system's time
+		m_pSystem->UpdateTime();
 
-		for (int j = 0; j < 8; j++)
+		// std::cout << m_pSystem->LapClock(0) * 64.f; test expected frame-rate
+		deltaTime = m_pSystem->LapClock(0);
+		scaledDT = (float)(deltaTime * TIME_COEFFICIENT);
+
+		//Update the mesh manager's time without updating for collision detection
+		m_pMeshMngr->Update(false);
+
+		//First person camera movement
+		if (m_bFPC == true)
+			CameraRotation();
+
+		ArcBall();
+
+		// navigate through the octtree
+		chupManager->ClearIndices();
+		//m_pRoot->ClearList();
+		for (int i = 0; i < 8; i++)
 		{
-			pChild = m_pRoot->GetChild(i)->GetChild(j);
-			pChild->ClearList();
-			// populate list
-			FindChups(pChild);
+			pChild = m_pRoot->GetChild(i);
+			//pChild->ClearList();
+
+			for (int j = 0; j < 8; j++)
+			{
+				pChild = m_pRoot->GetChild(i)->GetChild(j);
+				pChild->ClearList();
+				// populate list
+				FindChups(pChild);
+			}
+		}
+
+		// check collisions in the now populated structure
+		RecurseSO(m_pRoot);
+
+		// update canyon
+		canyonManager->Update(scaledDT);
+
+		cameraFX->CameraBob();
+
+		for (int i = 0; i < chupManager->chups.size(); i++)
+		{
+			chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));
+		}
+
+		//draw the projectiles 
+		for (int i = 0; i < player->projectiles.size(); i++)
+		{
+			player->projectiles.at(i).Move(scaledDT);
+			m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
+			player->projectiles.at(i).bounding->SetModelMatrix(glm::translate(player->projectiles.at(i).position)); //move those bounding objects
+		}
+
+		player->Countdown(scaledDT);
+
+		// update chupacabras
+		chupManager->Update(scaledDT);
+
+		//Add a representation of the Spheres to the render list
+		vector3 v3Color = REWHITE;
+
+		m_pMeshMngr->PrintLine(player->ShowScore(), REWHITE);
+
+		if (starting)
+		{
+			gameState = Start; 
+			starting = false; 
 		}
 	}
-
-	// check collisions in the now populated structure
-	RecurseSO(m_pRoot);
-
-	// update canyon
-	canyonManager->Update(scaledDT);
-
-	cameraFX->CameraBob();
-
-	for (int i = 0; i < chupManager->chups.size(); i++)
+	else if (gameState == Pause)
 	{
-		chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));
+		m_pMeshMngr->PrintLine("Paused", REWHITE); 
+		deltaTime = 0.0f; 
+		m_pMeshMngr->Update(false); 
 	}
-
-	//draw the projectiles 
-	for (int i = 0; i < player->projectiles.size(); i++)
-	{
-		player->projectiles.at(i).Move(scaledDT);
-		m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
-		player->projectiles.at(i).bounding->SetModelMatrix(glm::translate(player->projectiles.at(i).position)); //move those bounding objects
-	}
-
-	player->Countdown(scaledDT);
-
-	// update chupacabras
-	chupManager->Update(scaledDT);
-
-	//Add a representation of the Spheres to the render list
-	vector3 v3Color = REWHITE;
-
-	m_pMeshMngr->PrintLine(player->ShowScore(), REWHITE);
 
 
 }
