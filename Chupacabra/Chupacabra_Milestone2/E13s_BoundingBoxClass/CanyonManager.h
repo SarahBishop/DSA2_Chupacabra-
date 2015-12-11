@@ -14,6 +14,8 @@ public:
 	float nearPlane;
 	float farPlane;
 	float cameraDepth = 5.0f; // padding to prevent camera clipping
+	vector3 bgPosition;
+	vector3 bgScale;
 
 	// meshmanager
 	MeshManagerSingleton* m_pMeshMngr;

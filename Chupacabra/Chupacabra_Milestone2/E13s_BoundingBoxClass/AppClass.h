@@ -15,6 +15,7 @@ Date: 2015/09
 #include "ChupManagerSingleton.h"
 #include "CameraEffect.h"
 #include "Carlos.h"
+#include "MyOctant.h"
 
 using namespace ReEng; //Using ReEng namespace to use all the classes in the dll
 
@@ -33,6 +34,8 @@ class AppClass : public ReEngAppClass
 	vector3 m_v3O2 = vector3( 2.5f, 0.0f, 0.0f);
 
 	CameraEffect* cameraFX = nullptr;
+	MyOctant* m_pRoot = nullptr;
+	MyOctant* pChild = nullptr;
 
 public:
 	const float TIME_COEFFICIENT = 64.f;
@@ -97,6 +100,9 @@ public:
 	IF INHERITED AND OVERRIDEN MAKE SURE TO RELEASE BASE POINTERS (OR CALL BASED CLASS RELEASE)
 	*/
 	virtual void Release(void) final;
+
+	void RecurseSO(MyOctant* node);
+	void FindChups(MyOctant* node);
 };
 
 #endif //__APPLICATION_H_

@@ -15,30 +15,74 @@ void AppClass::InitVariables(void)
 	m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
 	m_v3O2 = vector3(2.5f, 0.0f, 0.0f);
 
-	//Load Models
-	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra");
-	//m_pMeshMngr->LoadModel("Planets\\00_Sun.obj", "Chupacabra2");
+	chupManager = ChupManagerSingleton::GetInstance();
 
-	//m_pBB1 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra"), true);
-	//m_pBB2 = new MyBoundingObjectClass(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
-
-	// initiate singleton
-	//BoundingObjectManager* instance = BoundingObjectManager::GetInstance();
-	//instance = BoundingObjectManager::GetInstance(); 
-	chupManager = ChupManagerSingleton::GetInstance(); 
-	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra"), true);
-	//instance->CreateBoundingObj(m_pMeshMngr->GetVertexList("Chupacabra2"), true);
 
 	chupManager->GenerateChupacabras(1, true);
 
 	canyonManager = new CanyonManager();
 	canyonManager->GenerateCanyon(35);
 	cameraFX = new CameraEffect();
-	player = Carlos::GetInstance(); 
+	player = Carlos::GetInstance();
 
 	deltaTime = 0.f;
-}
 
+	// octtree
+	m_pRoot = new MyOctant(vector3(0.0f, 0.0f, 0.0f), 20.0f);
+
+	// loop through BO objects to check for their octants
+	for (int i = 0; i < chupManager->chups.size(); i++)
+	{
+		m_pRoot->CheckForBOInOctant(&(chupManager->chups[i]));
+	}
+	std::cout << m_pRoot->objectsInNode.size();
+	// check if there are more than 3 colliding objects in list
+	m_pRoot->Subdivide();
+
+	for (int j = 0; j < 8; j++)
+	{
+		pChild = m_pRoot->GetChild(j);
+
+		pChild->Subdivide();
+	}
+}
+// find the chups in the nodes again
+void AppClass::FindChups(MyOctant* node)
+{
+	//if (node->GetParent()->objectsInNode.size() <= 0) return;
+	if (node->GetParent() != nullptr)
+	{
+		// for each chup
+		for (int i = 0; i < chupManager->chups.size(); i++)
+		{
+			// check for the octant
+			node->CheckForBOInOctant(&chupManager->chups[i]);
+		}
+	}
+	/*else
+	{
+	for (int i = 0; i < chupManager->chups.size(); i++)
+	{
+	node->CheckForBOInOctant(&(chupManager->chups[i]));
+	}
+	}*/
+}
+// performs collision detection in leaf nodes
+void AppClass::RecurseSO(MyOctant* node)
+{
+	if (node->GetChildren() > 0)
+	{
+		for (int i = 0; i < node->GetChildren(); i++)
+		{
+			RecurseSO(node->GetChild(i));
+		}
+	}
+	else
+	{
+		//call collision detection
+		chupManager->CheckCollisions(node);
+	}
+}
 void AppClass::Update(void)
 {
 	//Update the system's time
@@ -57,19 +101,31 @@ void AppClass::Update(void)
 
 	ArcBall();
 
+	// navigate through the octtree
+	chupManager->ClearIndices();
+	//m_pRoot->ClearList();
+	for (int i = 0; i < 8; i++)
+	{
+		pChild = m_pRoot->GetChild(i);
+		//pChild->ClearList();
+
+		for (int j = 0; j < 8; j++)
+		{
+			pChild = m_pRoot->GetChild(i)->GetChild(j);
+			pChild->ClearList();
+			// populate list
+			FindChups(pChild);
+		}
+	}
+
+	// check collisions in the now populated structure
+	RecurseSO(m_pRoot);
+
 	// update canyon
 	canyonManager->Update(scaledDT);
 
 	cameraFX->CameraBob();
 
-	//Set the model matrices for both objects and Bounding Spheres
-	//m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Chupacabra");
-	//m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O2), "Chupacabra2");
-
-	//m_pBB1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
-	//m_pBB2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
-	//instance->objects[0]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra"));
-	//instance->objects[1]->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Chupacabra2"));
 	for (int i = 0; i < chupManager->chups.size(); i++)
 	{
 		chupManager->chups[i].myBO->SetModelMatrix(glm::translate(chupManager->chups[i].position));
@@ -78,84 +134,22 @@ void AppClass::Update(void)
 	//draw the projectiles 
 	for (int i = 0; i < player->projectiles.size(); i++)
 	{
-		player->projectiles.at(i).Move(scaledDT); 
+		player->projectiles.at(i).Move(scaledDT);
 		m_pMeshMngr->AddSphereToQueue(glm::translate(IDENTITY_M4, player->projectiles.at(i).position) * glm::scale(vector3(1.0f, 1.0f, 1.0f)));
 		player->projectiles.at(i).bounding->SetModelMatrix(glm::translate(player->projectiles.at(i).position)); //move those bounding objects
 	}
 
-	//check for projectile/chup collisions
-	/*for (int i = 0; i < player->projectiles.size; i++)
-	{
-		for (int j = 0; j < chupManager->chups.size; j++)
-		{
-			if (player->projectiles.at(i).bounding->IsColliding(chupManager->chups[j].myBO))
-			{
-				player->score++;
-			}
-		}
-	}*/
+	player->Countdown(scaledDT);
 
-	player->Countdown(scaledDT); 
-	
 	// update chupacabras
 	chupManager->Update(scaledDT);
 
 	//Add a representation of the Spheres to the render list
 	vector3 v3Color = REWHITE;
-	//if (instance->objects[0]->IsColliding(instance->objects[1]))
-	//	v3Color = RERED;
-	/*for (int i = 0; i < instance->objects.size(); i++)
-		instance->objects[i]->SetColor(REWHITE); 
-	instance->CheckCollisions(); */
 
-	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB1->GetCenterGlobal()) * glm::scale(m_pBB1->GetHalfWidthG() * 2.0f), v3Color, WIRE);
-	//m_pMeshMngr->AddCubeToQueue(glm::translate(m_pBB2->GetCenterGlobal()) * glm::scale(m_pBB2->GetHalfWidthG() * 2.0f), v3Color, WIRE);
+	m_pMeshMngr->PrintLine(player->ShowScore(), REWHITE);
 
-	//m_pMeshMngr->AddCubeToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(m_pBB1->GetHalfWidth() * 2.0f), v3Color, WIRE);
-	//m_pMeshMngr->AddCubeToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(m_pBB2->GetHalfWidth() * 2.0f), v3Color, WIRE);
 
-	//m_pMeshMngr->AddSphereToQueue(m_pBB1->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB1->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB1->fRadiusG)), v3Color, WIRE);
-	//m_pMeshMngr->AddSphereToQueue(m_pBB2->GetModelMatrix() * glm::translate(IDENTITY_M4, m_pBB2->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * m_pBB2->fRadiusG)), v3Color, WIRE);
-
-	//for (int i = 0; i < instance->objects.size(); i++)
-	//{
-	//	if (instance->aabbVisible)
-	//		//m_pMeshMngr->AddCubeToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(instance->objects[i]->GetHalfWidthG() * 2.0f), instance->objects[i]->v3Color, WIRE);
-	//	if (instance->isVisible && instance->objects[i]->visible)
-	//	{
-	//		//m_pMeshMngr->AddCubeToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(instance->objects[i]->GetHalfWidth() * 2.0f), instance->objects[i]->v3Color, WIRE);
-	//		//m_pMeshMngr->AddSphereToQueue(instance->objects[i]->GetModelMatrix() * glm::translate(IDENTITY_M4, instance->objects[i]->GetCenterLocal()) * glm::scale(glm::vec3(2.0f * instance->objects[i]->fRadiusG)), instance->objects[i]->v3Color, WIRE);
-	//		//instance->objects[0]->m_pSphere->RenderWire(glm::translate(matrix4(1.0f), instance->objects[0]->center)),;
-	//		m_pMeshMngr->AddSphereToQueue(glm::translate(instance->objects[i]->GetCenterGlobal()) * glm::scale(vector3(instance->objects[i]->fRadius)), REWHITE, WIRE);
-	//	}
-	//}
-
-	// draw planes
-	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(0.0f, -1.0f, 0.0f)) * glm::rotate(90.0f, vector3(1.0f, 0.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE); // floor
-	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
-	//m_pMeshMngr->AddPlaneToQueue(glm::translate(vector3(-5.0f, 4.0f, 0.0f)) * glm::rotate(90.0f, vector3(0.0f, 1.0f, 0.0f)) * glm::scale(vector3(10.0f, 10.0f, 25.0f)), REWHITE);
-
-	m_pMeshMngr->PrintLine(player->ShowScore(), REWHITE); 
-
-	//Adds all loaded instance to the render list
-	//m_pMeshMngr->AddInstanceToRenderList("ALL");
-
-	////Indicate the FPS
-	//int nFPS = m_pSystem->GetFPS();
-	////print info into the console
-	//printf("FPS: %d            \r", nFPS);//print the Frames per Second
-	////Print info on the screen
-	//m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
-	//m_pMeshMngr->Print("FPS:");
-	//m_pMeshMngr->PrintLine(std::to_string(nFPS), RERED);
-
-	//// print bools
-	//m_pMeshMngr->Print("BO Visible (V) : ");
-	//m_pMeshMngr->PrintLine(std::to_string(instance->isVisible), RERED);
-	//m_pMeshMngr->Print("AABB Visible (B) : ");
-	//m_pMeshMngr->PrintLine(std::to_string(instance->aabbVisible), RERED);
-	//m_pMeshMngr->Print("Collision Resolution (R) : ");
-	//m_pMeshMngr->PrintLine(std::to_string(instance->canCollide), RERED);
 }
 
 void AppClass::Display(void)
@@ -178,11 +172,11 @@ void AppClass::Display(void)
 		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY, REBLUE * 0.75f); //renders the XY grid with a 100% scale
 		break;
 	}
-	
+
 	m_pMeshMngr->Render(); //renders the render list
 	canyonManager->Render(); // render canyon
 	chupManager->Render();
-
+	//m_pRoot->Display();
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
 }
 
@@ -194,4 +188,10 @@ void AppClass::Release(void)
 	//SafeDelete(instance);
 	SafeDelete(canyonManager);
 	SafeDelete(chupManager);
+
+	if (m_pRoot != nullptr)
+	{
+		delete m_pRoot;
+		m_pRoot = nullptr;
+	}
 }

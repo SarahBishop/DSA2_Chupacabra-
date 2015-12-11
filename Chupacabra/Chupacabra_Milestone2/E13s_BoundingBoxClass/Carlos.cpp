@@ -53,7 +53,7 @@ void Carlos::ThrowObject(vector2 coord)
 void Carlos::Countdown(float scaledDeltaTime)
 {
 	if (projectiles.size() > 0) {
-		if (projectiles[0].killMe) {
+		if (projectiles[projectiles.size() - 1].killMe) {
 			DeleteFirstProjectile();
 		}
 	}

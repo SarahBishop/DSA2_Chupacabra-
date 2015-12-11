@@ -23,12 +23,12 @@ void AppClass::ProcessKeyboard(void)
 
 #pragma region Camera Positioning
 	if(true)
-		fSpeed *= 10.0f;
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_pCameraMngr->MoveForward(fSpeed);*/
+		/*fSpeed *= 100.0f;
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		m_pCameraMngr->MoveForward(fSpeed);
 
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCameraMngr->MoveForward(-fSpeed);*/
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		m_pCameraMngr->MoveForward(-fSpeed);
 	
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		if (m_pCameraMngr->GetPosition().x >= -5.0f + fSpeed){ m_pCameraMngr->MoveSideways(-fSpeed); }
@@ -36,10 +36,10 @@ void AppClass::ProcessKeyboard(void)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		if (m_pCameraMngr->GetPosition().x <= 5.0f - fSpeed){ m_pCameraMngr->MoveSideways(fSpeed); }
 
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		m_pCameraMngr->MoveVertical(-fSpeed);*/
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		m_pCameraMngr->MoveVertical(-fSpeed);
 
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		m_pCameraMngr->MoveVertical(fSpeed);*/
 #pragma endregion
 

@@ -3,6 +3,7 @@
 
 #include "Chupacabra.h"
 #include "Carlos.h"
+#include "MyOctant.h"
 #include <vector>
 
 class ChupManagerSingleton{
@@ -39,6 +40,9 @@ public:
 
 	// find out who's colliding
 	void CheckCollisions();
+	void CheckCollisions(MyOctant* node);
+	void ClearIndices();
+	void ResolveAllCollisions();
 
 	// resolve collisions with all colliding objects
 	vector3 ResolveCollisions(int currentChup, int index);

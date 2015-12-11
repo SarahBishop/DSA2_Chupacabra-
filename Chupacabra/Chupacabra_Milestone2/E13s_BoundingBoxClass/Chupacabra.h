@@ -51,6 +51,8 @@ public:
 	MyBoundingObjectClass* myBO;
 	MeshManagerSingleton* m_pMeshMngr;
 
+	int INDEX;
+
 	// radius for collisions, possibly temporary
 	//float fRadius;
 

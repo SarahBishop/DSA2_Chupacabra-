@@ -7,7 +7,11 @@ CanyonManager::CanyonManager()
 	farPlane = 0;
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
 	m_pSystem = SystemSingleton::GetInstance(); 
+	
 	//m_pSystem->AddClock();
+
+	// load canyon plane
+	m_pMeshMngr->LoadModel("ChupStuff\\SkyPlane.obj", "SkyPlane");
 }
 void CanyonManager::GenerateCanyon(uint nSegments)
 {
@@ -19,6 +23,8 @@ void CanyonManager::GenerateCanyon(uint nSegments)
 	}
 
 	farPlane = -segmentZLength * (nSegments - 1) + cameraDepth; // define farPlane 
+	bgPosition = vector3(0.0f, 23.0f, farPlane);
+	bgScale = vector3(10.0f, 20.0f, 0.0f);
 }
 void CanyonManager::Render()
 {
@@ -26,7 +32,9 @@ void CanyonManager::Render()
 	{
 		listOfSegments.at(i).Render();
 	}
-	//render the distance fog
+	//render the back plane
+	m_pMeshMngr->AddInstanceToRenderList("SkyPlane");
+	m_pMeshMngr->SetModelMatrix(glm::translate(bgPosition) * glm::scale(bgScale), "SkyPlane");
 }
 void CanyonManager::Update(float scaledDeltaTime)
 {
